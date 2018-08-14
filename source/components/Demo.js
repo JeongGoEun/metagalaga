@@ -15,7 +15,7 @@ export default class Demo extends Component {
       "/static/unity/Build/UnityLoader.js"
     );
 
-    this.unityContent.on("Say", message => {
+    /*this.unityContent.on("Say", message => {
       console.log("Wow Unity said: " + message);
     });
 
@@ -29,7 +29,7 @@ export default class Demo extends Component {
 
     this.unityContent.on("loaded", () => {
       console.log("Yay! Unity is loaded!");
-    });
+    });*/
   }
 
   onClickStart() {
