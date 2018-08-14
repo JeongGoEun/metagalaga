@@ -11,8 +11,8 @@ export default class Demo extends Component {
     this.speed = 30;
 
     this.unityContent = new UnityContent(
-      "/static/unity_project_build/Build.json",
-      "/static/unity_project_build/UnityLoader.js"
+      "/static/unity/Build/Build.json",
+      "/static/unity/Build/UnityLoader.js"
     );
 
     this.unityContent.on("Say", message => {
