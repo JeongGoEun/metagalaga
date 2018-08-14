@@ -1,0 +1,5 @@
+static/unity/Temp/*
+static/unity/obj/*
+static/unity/Library/metadata/*
+static/unity/Library/*Cache/*
+static/unity/Library/shadercompiler*.log
