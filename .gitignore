@@ -1,3 +1,5 @@
+node_modules/*
+
 static/unity/Temp/*
 static/unity/obj/*
 static/unity/Library/metadata/*
