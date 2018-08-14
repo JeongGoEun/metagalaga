@@ -7,8 +7,9 @@ this project is for what
 
 ## Run
 ```shell
-npm install
-npm run dev
+git clone https://github.com/JeongGoEun/MetaGalaga.git
+cd MetaGalaga
+npm install && npm run dev
 ```
 
 ## License
