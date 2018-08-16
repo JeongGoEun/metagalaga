@@ -15,6 +15,9 @@ export default class Demo extends Component {
       "/static/unity/Build/UnityLoader.js"
     );
 
+    this.unityContent.on("SendId",MetaId => {
+      console.log("Unity id : "+MetaId);
+    })
     /*this.unityContent.on("Say", message => {
       console.log("Wow Unity said: " + message);
     });

@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 public class MainScript : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class MainScript : MonoBehaviour
     public InputField IdInputField;
     public GameObject loginPanel;
 
-    string userMetaId;
+    private string userMetaId;
     private bool idCheck = false;
 
     // Use this for initialization
@@ -28,8 +29,18 @@ public class MainScript : MonoBehaviour
 
     }
 
+    [DllImport("__Internal")]   //event for react script
+    private static extern void SendId(string MetaId);
 
-    public void onClick()
+    private void Awake()
+    {
+        Debug.Log("Call Awake()");
+        this.panelLoginBtn.onClick.AddListener(() => {
+            SendId(this.userMetaId);
+        });
+	}
+
+	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
 
@@ -72,7 +83,7 @@ public class MainScript : MonoBehaviour
             case "panelLoginBtn":
                 //Modifiy using METAID with smartcontract
                 userMetaId = IdInputField.text.ToString();
-                Debug.Log("user METAID : " + userMetaId);
+                Debug.Log("user METAID -- : " + userMetaId);
 
                 if (userMetaId == "1")
                 {
