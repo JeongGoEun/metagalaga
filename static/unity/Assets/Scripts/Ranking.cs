@@ -5,17 +5,23 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System.Runtime.InteropServices;
 
 public class Ranking : MonoBehaviour {
     public Button quitBtn, replayBtn;
-    int userScore=0;
+    private int userScore=0;
 
-
-	// Use this for initialization
+    //for event method
+    [DllImport("__Internal")]   //event for react script
+    private static extern void GameOver(int userScore);
+	
 	void Start () {
         userScore = PlayerPrefs.GetInt("userScore");//get user score from Player.cs
-        Debug.Log("userScore : " + userScore.ToString());
-
+        if (userScore != 0)
+        {   //바로 넘어오지 않았을 때 game over event 전달
+            GameOver(userScore);
+        }
+        Debug.Log("Game over and userScore : " + userScore.ToString());
 	}
 	
 	// Update is called once per frame
@@ -23,7 +29,7 @@ public class Ranking : MonoBehaviour {
 		
 	}
 
-    public void onClick()
+	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
 

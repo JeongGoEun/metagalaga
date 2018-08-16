@@ -17,7 +17,11 @@ public class MainScript : MonoBehaviour
     private string userMetaId;
     private bool idCheck = false;
 
-    // Use this for initialization
+
+    // for event method
+    [DllImport("__Internal")]   //event for react script
+    private static extern void SendId(string MetaId);
+
     void Start()
     {
         loginPanel.SetActive(false);
@@ -28,9 +32,6 @@ public class MainScript : MonoBehaviour
     {
 
     }
-
-    [DllImport("__Internal")]   //event for react script
-    private static extern void SendId(string MetaId);
 
     private void Awake()
     {
