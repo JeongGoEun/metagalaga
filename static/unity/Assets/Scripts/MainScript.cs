@@ -84,7 +84,6 @@ public class MainScript : MonoBehaviour
             case "panelLoginBtn":
                 //Modifiy using METAID with smartcontract
                 userMetaId = IdInputField.text.ToString();
-                Debug.Log("user METAID -- : " + userMetaId);
 
                 if (userMetaId == "1")
                 {
@@ -93,6 +92,8 @@ public class MainScript : MonoBehaviour
                     loginBtn.GetComponentInChildren<Text>().text = "PLAY";
 
                     idCheck = true;
+
+                    Debug.Log("user METAID -- : " + userMetaId);
                 }
                 else
                 {
