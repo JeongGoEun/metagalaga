@@ -16,6 +16,7 @@ class RankQR extends React.Component{
           renderAs: 'svg',
         };
         this.update=this.update.bind(this); //QR update function binding
+        this.onClickCancel=this.onClickCancel.bind(this);
       }
     
       update = () => {
@@ -25,6 +26,10 @@ class RankQR extends React.Component{
           value: userScore
         });
       };
+
+      onClickCancel(){  //cancel 버튼을 누르면 메인 화면으로 돌아갈 수 있도록
+        this.props.clickCancel(); // Demo.js의 clickCancel 호출
+      }
 
       render(){
           return(
@@ -38,6 +43,7 @@ class RankQR extends React.Component{
                 level={this.state.level}
                 renderAs={this.state.renderAs}
                 />
+                <button id="cancelBtn" onClick={this.onClickCancel.bind(this)}> {"cancel"} </button>
             </div>
           );
       }

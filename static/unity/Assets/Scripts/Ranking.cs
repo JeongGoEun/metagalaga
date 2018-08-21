@@ -30,6 +30,10 @@ public class Ranking : MonoBehaviour {
 		
 	}
 
+    public void ClickCancelButton(){
+        SceneManager.LoadScene("Main");
+    }
+
 	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
