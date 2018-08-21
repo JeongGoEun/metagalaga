@@ -8,7 +8,7 @@ class RankQR extends React.Component{
     constructor(props){
       super(props);
       this.state = {
-          value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
+          value: 'https://github.com/JeongGoEun/MetaGalaga/',
           size: 128,
           fgColor: '#000000',
           bgColor: '#ffffff',
@@ -30,7 +30,7 @@ class RankQR extends React.Component{
           return(
             <div>
                 <button id="QRBtn" onClick={this.update.bind(this)} >{"QRCode"}</button>
-                <QRCode 
+                <QRCode id="ScoreQRCode" 
                 value={this.state.value}  // 부모에서 값 가져오기
                 size={this.state.size}
                 fgColor={this.state.fgColor}

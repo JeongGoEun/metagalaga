@@ -5,6 +5,7 @@ import RankQR from "./RankQR";
 export default class Demo extends Component {
   state = {
     userScore: 0,
+    rankQRisVisible: false,
   }
   constructor(props) {
     super(props);
@@ -20,14 +21,22 @@ export default class Demo extends Component {
 
     this.unityContent.on("GameOver",userScore => {  //유니티에서 점수 올 때
       this.setState({userScore: userScore});
+      document.getElementById("rankQRCode").style.display="block";
+      console.log("display--------------")
     });
   }
-
+  componentDidMount(){
+    document.getElementById("rankQRCode").style.display="none";
+  }
   render() {
     return (
       <div>
-        <Unity unityContent={this.unityContent} />
-        <RankQR id="rankQRCode" value={this.state.userScore}/>
+        <div>
+          <Unity unityContent={this.unityContent} />
+        </div>
+        <div id="rankQRCode">
+          <RankQR value={this.state.userScore}/>
+        </div>
       </div>
     );
   }
