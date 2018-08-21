@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import Unity, { UnityContent } from "react-unity-webgl"
+import Unity, { UnityContent } from "react-unity-webgl";
+import RankQR from "./RankQR";
 
-export default class Demo extends React.Component {
+export default class Demo extends Component {
+  state = {
+    userScore: 0,
+  }
   constructor(props) {
     super(props);
 
@@ -14,21 +18,16 @@ export default class Demo extends React.Component {
       console.log("Unity id : "+MetaId);
     });
 
-    this.unityContent.on("GameOver",userScore => {
+    this.unityContent.on("GameOver",userScore => {  //유니티에서 점수 올 때
       this.setState({userScore: userScore});
-      document.getElementById("rankingBtn").innerHTML=userScore;  //버튼 랭킹 텍스트로 바꾸기
     });
-  }
-
-  onClickStart(){
-
   }
 
   render() {
     return (
       <div>
-        <button id="rankingBtn" onClick={this.onClickStart.bind(this)} >{"Ranking"}</button>
         <Unity unityContent={this.unityContent} />
+        <RankQR id="rankQRCode" value={this.state.userScore}/>
       </div>
     );
   }
