@@ -10,17 +10,20 @@ using System.Runtime.InteropServices;
 public class Ranking : MonoBehaviour {
     public Button quitBtn, replayBtn;
     private int userScore=0;
+    private string userMeteId = "";
 
     //for event method
     [DllImport("__Internal")]   //event for react script
-    private static extern void GameOver(int userScore);
+    private static extern void GameOver(int userScore, string userMetaId);
 	
 	void Start () {
-        userScore = PlayerPrefs.GetInt("userScore");//get user score from Player.cs
+        userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
+        userMeteId = PlayerPrefs.GetString("userMetaId");   //get user metaId from MainScript.cs
+
         if (userScore != 0)
         {   //바로 넘어오지 않았을 때 game over event 전달
-            GameOver(userScore);
-            Debug.Log("Send userScore to react WebGL : " + userScore.ToString());
+            GameOver(userScore, userMeteId);
+            Debug.Log("Send userScore to react WebGL : " + userScore.ToString() + "  "+userMeteId);
         }
 
 	}

@@ -35,7 +35,7 @@ class RankQR extends React.Component{
           return(
             <div>
                 <button id="QRBtn" onClick={this.update.bind(this)} >{"QRCode"}</button>
-                <QRCode id="ScoreQRCode" 
+                <QRCode id="ScoreQRCode" style={{padding: '2em'}}
                 value={this.state.value}  // 부모에서 값 가져오기
                 size={this.state.size}
                 fgColor={this.state.fgColor}

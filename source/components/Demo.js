@@ -8,6 +8,7 @@ export default class Demo extends Component {
 
     this.state = {
       userScore: 0,
+      userMeteId: "",
       rankQRisVisible: false,
     }
 
@@ -16,14 +17,15 @@ export default class Demo extends Component {
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    this.unityContent.on("SendId", MetaId => { //유니티에서 오는 것
-      console.log("Unity id : "+MetaId);
+    this.unityContent.on("SendId", userMetaId => { //유니티에서 오는 것
+      console.log("Unity id - "+userMetaId);
     });
 
-    this.unityContent.on("GameOver",userScore => {  //유니티에서 게임이 끝났을 때
+    this.unityContent.on("GameOver", (userScore, userMeteId) => {  //유니티에서 게임이 끝났을 때
       this.setState({userScore: userScore});
+      this.setState({userMeteId: userMeteId})
       document.getElementById("rankQRCode").style.display="block";
-      console.log("display--------------")
+      console.log("GameOver values : "+this.state.userScore+"  "+this.state.userMeteId);
     });
   }
 

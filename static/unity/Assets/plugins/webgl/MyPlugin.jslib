@@ -1,9 +1,11 @@
 ﻿mergeInto(LibraryManager.library, {
-  SendId: function(MetaId) {
-    ReactUnityWebGL.SendId(MetaId);
+  SendId: function(userMetaId) {
+    window.alert(userMetaId+"----");
+    ReactUnityWebGL.SendId(userMetaId);
   },
 
-  GameOver: function(userScore) {
-    ReactUnityWebGL.GameOver(userScore);
+  GameOver: function(userScore, userMetaId) {
+    window.alert(userMetaId);
+    ReactUnityWebGL.GameOver(userScore, userMetaId);
   }
 });

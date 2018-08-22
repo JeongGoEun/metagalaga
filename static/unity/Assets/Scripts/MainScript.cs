@@ -14,13 +14,13 @@ public class MainScript : MonoBehaviour
     public InputField IdInputField;
     public GameObject loginPanel;
 
-    private string userMetaId;
+    public string userMetaId="";
     private bool idCheck = false;
 
 
     // for event method
     [DllImport("__Internal")]   //event for react script
-    private static extern void SendId(string MetaId);
+    private static extern void SendId(string userMetaId);
 
     void Start()
     {
@@ -32,14 +32,6 @@ public class MainScript : MonoBehaviour
     {
 
     }
-
-    private void Awake()
-    {
-        Debug.Log("Call Awake()");
-        this.panelLoginBtn.onClick.AddListener(() => {
-            SendId(this.userMetaId);
-        });
-	}
 
 	public void onClick()
     {
@@ -55,7 +47,6 @@ public class MainScript : MonoBehaviour
                 }
                 else
                 {   //Can Play
-                    PlayerPrefs.SetString("userMetaId", userMetaId);    //store METAID in prefs for interaction
                     SceneManager.LoadScene("Stage");    //Change scene
                 }
 
@@ -83,9 +74,9 @@ public class MainScript : MonoBehaviour
         {
             case "panelLoginBtn":
                 //Modifiy using METAID with smartcontract
-                userMetaId = IdInputField.text.ToString();
+                this.userMetaId = IdInputField.text;
 
-                if (userMetaId == "1")
+                if (this.userMetaId == "x")
                 {
                     //METAID exist in METADIUM
                     loginPanel.SetActive(false);
@@ -93,7 +84,10 @@ public class MainScript : MonoBehaviour
 
                     idCheck = true;
 
-                    Debug.Log("user METAID -- : " + userMetaId);
+                    PlayerPrefs.SetString("userMetaId", this.userMetaId);    //store METAID in prefs for interaction
+                    Debug.Log("user METAID -- 00: " + this.userMetaId);
+
+                    SendId(this.userMetaId);
                 }
                 else
                 {
