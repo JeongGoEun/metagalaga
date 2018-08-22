@@ -20,11 +20,16 @@ class RankQR extends React.Component{
       }
     
       update = () => {
-        var userScore=this.props.value.toString();
+        var userScore=this.props.value.toString();  //부모에서 id, score 받아오기
+        var userId=this.props.user;
+        var QRValue = userId+"/"+userScore; //구분자 : '/' 
+
         document.getElementById("QRBtn").innerHTML=userScore;  //버튼 랭킹 텍스트로 바꾸기
         this.setState({
-          value: userScore
+          value: QRValue
         });
+
+        console.log("RankQR.update()'s value : "+this.state.value);
       };
 
       onClickCancel(){  //cancel 버튼을 누르면 메인 화면으로 돌아갈 수 있도록

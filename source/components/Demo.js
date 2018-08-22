@@ -5,11 +5,11 @@ import RankQR from "./RankQR";
 export default class Demo extends Component {
   constructor(props) {
     super(props);
+    var userId
 
     this.state = {
       userScore: 0,
-      userMeteId: "",
-      rankQRisVisible: false,
+      userMeteId: "nop",
     }
 
     this.unityContent = new UnityContent(
@@ -18,16 +18,18 @@ export default class Demo extends Component {
     );
 
     this.unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
-      this.setState({userMetaId: userMetaId})
-      console.log("Unity id - "+this.state.userMetaId);
-      console.log("type "+typeof(userMetaId));
+      userId=userMetaId;
+      this.state.userMeteId=userId;
+      //this.setState({userMetaId: userId})
+      console.log("SendID : "+userId+"..."+this.state.userMeteId);
     });
 
-    this.unityContent.on("GameOver", (userScore, userMeteId) => {  //유니티에서 게임이 끝났을 때
+    this.unityContent.on("GameOver", (userScore) => {  //유니티에서 게임이 끝났을 때
       this.setState({userScore: userScore});
-      this.setState({userMeteId: userMeteId})
-      document.getElementById("rankQRCode").style.display="block";
-      console.log("GameOver values : "+this.state.userScore+"  "+this.state.userMeteId);
+
+      console.log("GameOver"+this.state.userMeteId);
+
+      document.getElementById("rankQRCode").style.display="block";  //게임 끝났을 때 큐알, 버튼 띄우기
     });
   }
 
@@ -46,7 +48,7 @@ export default class Demo extends Component {
           <Unity unityContent={this.unityContent} />
         </div>
         <div id="rankQRCode">
-          <RankQR value={this.state.userScore} clickCancel={this.clickCancel.bind(this)}/>
+          <RankQR value={this.state.userScore} user={this.state.userMeteId} clickCancel={this.clickCancel.bind(this)}/>
         </div>
       </div>
     );

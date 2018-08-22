@@ -4,8 +4,7 @@
     ReactUnityWebGL.SendId(str);
   },
 
-  GameOver: function(userScore, userMetaId) {
-    window.alert(userMetaId);
-    ReactUnityWebGL.GameOver(userScore, userMetaId);
+  GameOver: function(userScore) {
+    ReactUnityWebGL.GameOver(userScore);
   }
 });
