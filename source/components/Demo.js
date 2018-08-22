@@ -17,8 +17,10 @@ export default class Demo extends Component {
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    this.unityContent.on("SendId", userMetaId => { //유니티에서 오는 것
-      console.log("Unity id - "+userMetaId);
+    this.unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
+      this.setState({userMetaId: userMetaId})
+      console.log("Unity id - "+this.state.userMetaId);
+      console.log("type "+typeof(userMetaId));
     });
 
     this.unityContent.on("GameOver", (userScore, userMeteId) => {  //유니티에서 게임이 끝났을 때
