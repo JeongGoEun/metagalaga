@@ -21,19 +21,14 @@ public class Ranking : MonoBehaviour
     private static void GameOver(int userScore) {}
 #endif
 
-    void Start () {
+	private void Awake()
+	{
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
         if (userScore != 0)
         {   //바로 넘어오지 않았을 때 game over event 전달
             GameOver(userScore);
-            Debug.Log("Send userScore to react WebGL : " + userScore.ToString() );
+            Debug.Log("Send userScore to react WebGL --- : " + userScore.ToString());
         }
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     public void ClickCancelButton(){
