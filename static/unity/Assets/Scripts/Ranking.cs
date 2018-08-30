@@ -7,16 +7,21 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Runtime.InteropServices;
 
-public class Ranking : MonoBehaviour {
+public class Ranking : MonoBehaviour
+{
     public Button quitBtn, replayBtn;
-    private int userScore=0;
+    private int userScore = 0;
     //private string userMeteId = "";
 
-    //for event method
-    [DllImport("__Internal")]   //event for react script
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")] 
     private static extern void GameOver(int userScore);
-	
-	void Start () {
+#else
+    private static void GameOver(int userScore) {}
+#endif
+
+    void Start () {
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
         if (userScore != 0)
         {   //바로 넘어오지 않았을 때 game over event 전달
@@ -43,11 +48,11 @@ public class Ranking : MonoBehaviour {
         switch (curButton)
         {
             case "quitButton":
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-                #else
+#else
                         Application.Quit();
-                #endif
+#endif
                 break;
             case "replayButton":
                 SceneManager.LoadScene("Stage");

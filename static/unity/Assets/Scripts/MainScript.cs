@@ -14,13 +14,16 @@ public class MainScript : MonoBehaviour
     public InputField IdInputField;
     public GameObject loginPanel;
 
-    public string userMetaId="";
+    public string userMetaId = "";
     private bool idCheck = false;
 
 
-    // for event method
-    [DllImport("__Internal")]   //event for react script
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
     private static extern void SendId(string userMetaId);
+#else
+    private static void SendId(string userMetaId) {}
+#endif
 
     void Start()
     {
@@ -55,11 +58,11 @@ public class MainScript : MonoBehaviour
                 SceneManager.LoadScene("Ranking");
                 break;
             case "quitButton":
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-                #else
+#else
                         Application.Quit();
-                #endif
+#endif
                 break;
 
         }
