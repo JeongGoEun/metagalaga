@@ -7,14 +7,21 @@ public class DynamicScrollView : MonoBehaviour
 
     #region PUBLIC_VARIABLES
     public int noOfItems;
+    public object[] m_args;
 
     public GameObject item;
-
     public GridLayoutGroup gridLayout;
-
     public RectTransform scrollContent;
-
     public ScrollRect scrollRect;
+
+    public struct User {    //For data from Demo.js
+        public string userMetaId;
+        public string userName;
+        public int score;
+    }
+    public User[] rankedUsers = new User[10];
+    int userIndex = 1;
+
     #endregion
 
     #region PRIVATE_VARIABLES
@@ -49,19 +56,26 @@ public class DynamicScrollView : MonoBehaviour
 
     private void InitializeList()
     {
-        ClearOldElement();
-        for (int i = 0; i < noOfItems; i++)
-            InitializeNewItem("" + (i + 1));
-        SetContentHeight();
+       /* userIndex = 1;
+
+        for (int i = 1 ; i <= 10 ; i++) {
+            
+        }
+
+        ClearOldElement();*/
     }
 
-    private void InitializeNewItem(string name)
+    private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
     {
         GameObject newItem = Instantiate(item) as GameObject;
-        newItem.name = name;
+        newItem.name = _name;
+
+
         newItem.transform.SetParent(gridLayout.transform);
         newItem.transform.localScale = Vector3.one;
         newItem.SetActive(true);
+
+        SetContentHeight();
     }
     #endregion
 
@@ -80,14 +94,18 @@ public class DynamicScrollView : MonoBehaviour
     #region DELEGATES_CALLBACKS
     #endregion
 
-    #region UI_CALLBACKS
-    public void AddNewElement()
-    {
-        InitializeNewItem("" + (gridLayout.transform.childCount + 1));
-        SetContentHeight();
-        StartCoroutine(MoveTowardsTarget(0.2f, scrollRect.verticalNormalizedPosition, 0));
+    //For javascript event
+    public void SetUserMetaId(string _metaId) {
+        rankedUsers[userIndex].userMetaId = _metaId;
+        Debug.Log("Unity => " + _metaId);
     }
-    #endregion
-
+    public void SetUserName(string _name) {
+        rankedUsers[userIndex].userName = _name;
+        Debug.Log("Unity => " + _name);
+    }
+    public void SetUserScore(string _score) {
+        Debug.Log("Unity => " + _score + " index : " + userIndex);
+        rankedUsers[userIndex++].score = int.Parse(_score);       
+    }
 
 }

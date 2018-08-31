@@ -10,6 +10,8 @@ var flag=false;
 
 export default class Demo extends Component {
 
+
+
   constructor(props) {
     super(props);
     var userId
@@ -38,11 +40,23 @@ export default class Demo extends Component {
         //get MetaGalaga contract
         metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), '0x7139045062ed2d678aabf80ccdcec0de768f356f'); 
 
-        var i;
+        var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
           //get Ranking from contract
           const ranking = metaGalaga.methods.rankMap(i).call();
-          console.log(ranking);
+          ranking.then((result) => {
+            _metaId = result[0];
+            _name = result[1];
+            _score = result[2];
+
+            this.unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
+            this.unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
+            this.unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+
+            //console.log(params);
+          }).catch((err) => {
+            console.log(err);
+          });          
         }
       }
       

@@ -8,7 +8,7 @@ public class ScrollItem : MonoBehaviour
 
 
     #region PUBLIC_VARIABLES
-    public Text indexText;
+    public Text nameText, scoreText, metaIdText;
 
     public DynamicScrollView dynamicScrollView;
     #endregion
@@ -19,7 +19,9 @@ public class ScrollItem : MonoBehaviour
     #region UNITY_CALLBACKS
     void OnEnable()
     {
-        indexText.text = transform.name;
+        nameText.text = transform.name;
+        //scoreText.text = transform.score;
+        //metaIdText.text = transform.metaId;
     }
     #endregion
 

@@ -11,8 +11,6 @@ public class Ranking : MonoBehaviour
 {
     public Button quitBtn, replayBtn;
     private int userScore = 0;
-    //private string userMeteId = "";
-
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")] 
@@ -24,16 +22,10 @@ public class Ranking : MonoBehaviour
 	private void Awake()
 	{
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
-        if (userScore != 0)
-        {   //바로 넘어오지 않았을 때 game over event 전달
+        if (userScore != 0) {   //바로 넘어오지 않았을 때 game over event 전달
             GameOver(userScore);
-            Debug.Log("Send userScore to react WebGL --- : " + userScore.ToString());
         }
 	}
-
-    public void ClickCancelButton(){
-        SceneManager.LoadScene("Main");
-    }
 
 	public void onClick()
     {
@@ -54,5 +46,11 @@ public class Ranking : MonoBehaviour
                 break;
 
         }
+    }
+
+    // For javascript event
+    public void ClickCancelButton()
+    {
+        SceneManager.LoadScene("Main");
     }
 }
