@@ -17,10 +17,10 @@ public class DynamicScrollView : MonoBehaviour
     public struct User {    //For data from Demo.js
         public string userMetaId;
         public string userName;
-        public int score;
+        public int userScore;
     }
     public User[] rankedUsers = new User[10];
-    int userIndex = 1;
+    public int userIndex = 1;
 
     #endregion
 
@@ -32,13 +32,13 @@ public class DynamicScrollView : MonoBehaviour
     {
         InitializeList();
     }
-    #endregion
+	#endregion
 
-    #region PUBLIC_METHODS
-    #endregion
+	#region PUBLIC_METHODS
+	#endregion
 
-    #region PRIVATE_METHODS
-    private void ClearOldElement()
+	#region PRIVATE_METHODS
+	private void ClearOldElement()
     {
         for (int i = 0; i < gridLayout.transform.childCount; i++)
         {
@@ -56,13 +56,7 @@ public class DynamicScrollView : MonoBehaviour
 
     private void InitializeList()
     {
-       /* userIndex = 1;
-
-        for (int i = 1 ; i <= 10 ; i++) {
-            
-        }
-
-        ClearOldElement();*/
+        ClearOldElement();
     }
 
     private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
@@ -97,15 +91,52 @@ public class DynamicScrollView : MonoBehaviour
     //For javascript event
     public void SetUserMetaId(string _metaId) {
         rankedUsers[userIndex].userMetaId = _metaId;
-        Debug.Log("Unity => " + _metaId);
     }
     public void SetUserName(string _name) {
         rankedUsers[userIndex].userName = _name;
-        Debug.Log("Unity => " + _name);
     }
     public void SetUserScore(string _score) {
-        Debug.Log("Unity => " + _score + " index : " + userIndex);
-        rankedUsers[userIndex++].score = int.Parse(_score);       
+        rankedUsers[userIndex++].userScore = int.Parse(_score);
+        Debug.Log("Call Set User struct--");
+
+        if(userIndex == 11) {
+            for (int i = 1; i <= 10; i++) {
+                Debug.Log("OnEnable() : " + rankedUsers[i].userName + ", " + rankedUsers[i].userScore);
+            }
+        }
     }
 
+    public void RankingSort(User[] _users, int start, int end) {
+        //Sort using Quick sort algorithm
+        int pivot = _users[userIndex / 2].userScore;
+        int bs = start, be = end;
+        User temp;
+
+        while(start < end) {
+            while (pivot <= _users[end].userScore && start < end) end--;
+            if (start > end) break;
+            while (pivot >= _users[start].userScore && start < end) start++;
+            if (start > end) break;
+
+            temp = _users[end]; //swap
+            _users[end] = _users[start];
+            _users[start] = temp;
+        }
+
+        temp = _users[start]; //swap
+        _users[start] = _users[bs];
+        _users[bs] = temp;
+
+        if (bs < start)
+            RankingSort(rankedUsers, bs, start - 1);
+        if(be > end) {
+            RankingSort(rankedUsers, start + 1, be);
+        }
+    }
+
+    /*public void Swap(User a, User b) {
+        User temp = b;
+        b = a;
+        a = temp;
+    }*/
 }
