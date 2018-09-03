@@ -34,7 +34,7 @@ public class DynamicScrollView : MonoBehaviour
     #region UNITY_CALLBACKS
     void OnEnable()
     {
-        InitializeList();
+        
     }
 	#endregion
 
@@ -61,19 +61,27 @@ public class DynamicScrollView : MonoBehaviour
     private void InitializeList()
     {
         ClearOldElement();
+        foreach (User user in userList)
+        {
+            InitializeNewItem(user.userMetaId, user.userName, user.userScore);
+            Debug.Log("After sorting : " + user.userName + ", " + user.userScore);
+        }
+        SetContentHeight();
+
+
     }
 
     private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
     {
         GameObject newItem = Instantiate(item) as GameObject;
-        newItem.name = _name;
 
+        newItem.transform.GetChild(0).name = _name;
+        newItem.transform.GetChild(1).name = _metaId;
+        newItem.transform.GetChild(2).name = _score.ToString();
 
         newItem.transform.SetParent(gridLayout.transform);
         newItem.transform.localScale = Vector3.one;
         newItem.SetActive(true);
-
-        SetContentHeight();
     }
     #endregion
 
@@ -105,56 +113,11 @@ public class DynamicScrollView : MonoBehaviour
         userIndex++;
 
         if(userIndex == 11) {
-            
-            userList.Sort(delegate (User user1, User user2) {
+            userList.Sort(delegate (User user1, User user2) {   //sorting with user score
                 return user1.userScore.CompareTo(user2.userScore);
             });
 
-            foreach(User user in userList) {
-                Debug.Log("After sorting : " + user.userName + ", " + user.userScore);
-            }
-
-            /*RankingSort(rankedUsers, 1, 10);    // sorting user's ranking
-
-            for (int i = 1; i <= 10; i++) { //print ranking
-                Debug.Log("After sorting : " + rankedUsers[i].userName + ", " + rankedUsers[i].userScore);
-            }*/
+            InitializeList();
         }
     }
-
-   /* public void RankingSort(User[] _users, int start, int end) {
-        
-        //Sort using Quick sort algorithm
-        int pivot = _users[userIndex / 2].userScore;
-        int bs = start, be = end;
-        User temp = new User();
-
-        while(start < end) {
-            while (pivot <= _users[end].userScore && start < end) end--;
-            if (start > end) break;
-            while (pivot >= _users[start].userScore && start < end) start++;
-            if (start > end) break;
-
-            temp = _users[end]; //swap
-            _users[end] = _users[start];
-            _users[start] = temp;
-        }
-
-        temp = _users[start]; //swap
-        _users[start] = _users[bs];
-        _users[bs] = temp;
-
-        if (bs < start)
-            RankingSort(rankedUsers, bs, start - 1);
-        if (be > end)
-        {
-            RankingSort(rankedUsers, start + 1, be);
-        }
-    }
-
-    public void Swap(User a, User b) {
-        User temp = b;
-        b = a;
-        a = temp;
-    }*/
 }

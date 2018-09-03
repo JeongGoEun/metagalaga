@@ -4,9 +4,7 @@ using UnityEngine.UI;
 
 public class ScrollItem : MonoBehaviour
 {
-
-
-
+    
     #region PUBLIC_VARIABLES
     public Text nameText, scoreText, metaIdText;
 
@@ -19,9 +17,9 @@ public class ScrollItem : MonoBehaviour
     #region UNITY_CALLBACKS
     void OnEnable()
     {
-        nameText.text = transform.name;
-        //scoreText.text = transform.score;
-        //metaIdText.text = transform.metaId;
+        nameText.text = transform.GetChild(0).name;
+        scoreText.text = transform.GetChild(2).name;
+        metaIdText.text = transform.GetChild(1).name;
     }
     #endregion
 
