@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 
 public class DynamicScrollView : MonoBehaviour
 {
@@ -19,8 +21,10 @@ public class DynamicScrollView : MonoBehaviour
         public string userName;
         public int userScore;
     }
+
     public User[] rankedUsers = new User[10];
     public int userIndex = 1;
+    public List<User> userList = new List<User>();
 
     #endregion
 
@@ -96,21 +100,34 @@ public class DynamicScrollView : MonoBehaviour
         rankedUsers[userIndex].userName = _name;
     }
     public void SetUserScore(string _score) {
-        rankedUsers[userIndex++].userScore = int.Parse(_score);
-        Debug.Log("Call Set User struct--");
+        rankedUsers[userIndex].userScore = int.Parse(_score);
+        userList.Add(rankedUsers[userIndex]);
+        userIndex++;
 
         if(userIndex == 11) {
-            for (int i = 1; i <= 10; i++) {
-                Debug.Log("OnEnable() : " + rankedUsers[i].userName + ", " + rankedUsers[i].userScore);
+            
+            userList.Sort(delegate (User user1, User user2) {
+                return user1.userScore.CompareTo(user2.userScore);
+            });
+
+            foreach(User user in userList) {
+                Debug.Log("After sorting : " + user.userName + ", " + user.userScore);
             }
+
+            /*RankingSort(rankedUsers, 1, 10);    // sorting user's ranking
+
+            for (int i = 1; i <= 10; i++) { //print ranking
+                Debug.Log("After sorting : " + rankedUsers[i].userName + ", " + rankedUsers[i].userScore);
+            }*/
         }
     }
 
-    public void RankingSort(User[] _users, int start, int end) {
+   /* public void RankingSort(User[] _users, int start, int end) {
+        
         //Sort using Quick sort algorithm
         int pivot = _users[userIndex / 2].userScore;
         int bs = start, be = end;
-        User temp;
+        User temp = new User();
 
         while(start < end) {
             while (pivot <= _users[end].userScore && start < end) end--;
@@ -129,12 +146,13 @@ public class DynamicScrollView : MonoBehaviour
 
         if (bs < start)
             RankingSort(rankedUsers, bs, start - 1);
-        if(be > end) {
+        if (be > end)
+        {
             RankingSort(rankedUsers, start + 1, be);
         }
     }
 
-    /*public void Swap(User a, User b) {
+    public void Swap(User a, User b) {
         User temp = b;
         b = a;
         a = temp;

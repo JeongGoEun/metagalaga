@@ -250,7 +250,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 596547681}
   m_HandleRect: {fileID: 596547679}
   m_Direction: 2
-  m_Value: 0.9999987
+  m_Value: 0.9999991
   m_Size: 0.75332665
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1006,7 +1006,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 5000
+  m_Text: score
 --- !u!222 &830806515
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1274,7 +1274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d6592c302a3e741a5725e83818457f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  indexText: {fileID: 1963731880}
+  nameText: {fileID: 1963731880}
+  scoreText: {fileID: 830806514}
+  metaIdText: {fileID: 1166142678}
   dynamicScrollView: {fileID: 2011686819}
 --- !u!1 &1073013578
 GameObject:
@@ -1467,7 +1469,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: 0x1342523425123123412424123..
+  m_Text: metaId
 --- !u!222 &1166142679
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2124,11 +2126,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a6ce476ad180a46b144d561aea058a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noOfItems: 15
+  noOfItems: 10
   item: {fileID: 989894142}
   gridLayout: {fileID: 1822145629}
   scrollContent: {fileID: 1822145628}
   scrollRect: {fileID: 1073013579}
+  userIndex: 1
 --- !u!114 &2011686820
 MonoBehaviour:
   m_ObjectHideFlags: 0
