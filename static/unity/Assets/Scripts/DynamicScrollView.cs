@@ -6,11 +6,6 @@ using System;
 
 public class DynamicScrollView : MonoBehaviour
 {
-
-    #region PUBLIC_VARIABLES
-    public int noOfItems;
-    public object[] m_args;
-
     public GameObject item;
     public GridLayoutGroup gridLayout;
     public RectTransform scrollContent;
@@ -23,39 +18,14 @@ public class DynamicScrollView : MonoBehaviour
     }
 
     public User[] rankedUsers = new User[10];
-    public int userIndex = 1;
+    public int userIndex = 0;
     public List<User> userList = new List<User>();
 
-    #endregion
-
-    #region PRIVATE_VARIABLES
-    #endregion
-
-    #region UNITY_CALLBACKS
-    void OnEnable()
-    {
-        
-    }
-	#endregion
-
-	#region PUBLIC_METHODS
-	#endregion
-
-	#region PRIVATE_METHODS
 	private void ClearOldElement()
     {
-        for (int i = 0; i < gridLayout.transform.childCount; i++)
-        {
+        for (int i = 0; i < gridLayout.transform.childCount; i++){
             Destroy(gridLayout.transform.GetChild(i).gameObject);
         }
-    }
-
-
-
-    public void SetContentHeight()
-    {
-        float scrollContentHeight = (gridLayout.transform.childCount * gridLayout.cellSize.y) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.y);
-        scrollContent.sizeDelta = new Vector2(676, scrollContentHeight);
     }
 
     private void InitializeList()
@@ -64,11 +34,8 @@ public class DynamicScrollView : MonoBehaviour
         foreach (User user in userList)
         {
             InitializeNewItem(user.userMetaId, user.userName, user.userScore);
-            Debug.Log("After sorting : " + user.userName + ", " + user.userScore);
         }
         SetContentHeight();
-
-
     }
 
     private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
@@ -83,9 +50,7 @@ public class DynamicScrollView : MonoBehaviour
         newItem.transform.localScale = Vector3.one;
         newItem.SetActive(true);
     }
-    #endregion
 
-    #region PRIVATE_COROUTINES
     private IEnumerator MoveTowardsTarget(float time,float from,float target) {
         float i = 0;
         float rate = 1 / time;
@@ -95,10 +60,12 @@ public class DynamicScrollView : MonoBehaviour
             yield return 0;
         }
     }
-    #endregion
 
-    #region DELEGATES_CALLBACKS
-    #endregion
+    public void SetContentHeight()
+    {
+        float scrollContentHeight = (gridLayout.transform.childCount * gridLayout.cellSize.y) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.y);
+        scrollContent.sizeDelta = new Vector2(676, scrollContentHeight);
+    }
 
     //For javascript event
     public void SetUserMetaId(string _metaId) {
@@ -107,17 +74,20 @@ public class DynamicScrollView : MonoBehaviour
     public void SetUserName(string _name) {
         rankedUsers[userIndex].userName = _name;
     }
-    public void SetUserScore(string _score) {
+    public void SetUserScore(string _score) {   //have problem
         rankedUsers[userIndex].userScore = int.Parse(_score);
         userList.Add(rankedUsers[userIndex]);
         userIndex++;
+        Debug.Log("Array index : " + userIndex);
 
-        if(userIndex == 11) {
-            userList.Sort(delegate (User user1, User user2) {   //sorting with user score
-                return user1.userScore.CompareTo(user2.userScore);
+        if(userIndex == 10) {
+            userList.Sort(delegate (User user1, User user2) {   
+                //sorting with user score
+                return -1 * (user1.userScore.CompareTo(user2.userScore));
             });
 
             InitializeList();
+            return;
         }
     }
 }

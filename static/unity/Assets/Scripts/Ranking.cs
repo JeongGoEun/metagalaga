@@ -43,6 +43,7 @@ public class Ranking : MonoBehaviour
                 break;
             case "replayButton":
                 SceneManager.LoadScene("Stage");
+                Debug.Log("onClick : " + curButton);
                 break;
 
         }

@@ -28,8 +28,6 @@ class RankQR extends React.Component{
         this.setState({
           value: QRValue
         });
-
-        console.log("RankQR.update()'s value : "+this.state.value);
       };
 
       onClickCancel(){  //cancel 버튼을 누르면 메인 화면으로 돌아갈 수 있도록
