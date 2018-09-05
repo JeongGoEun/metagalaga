@@ -6,5 +6,9 @@
 
   GameOver: function(userScore) {
     ReactUnityWebGL.GameOver(userScore);
+  },
+
+  RegisterScore: function() {
+    ReactUnityWebGL.RegisterScore();
   }
 });

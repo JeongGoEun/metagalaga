@@ -17,13 +17,12 @@ public class MainScript : MonoBehaviour
     public string userMetaId = "";
     private bool idCheck = false;
 
-
-#if UNITY_WEBGL && !UNITY_EDITOR
+    #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void SendId(string userMetaId);
-#else
+    #else
     private static void SendId(string userMetaId) {}
-#endif
+    #endif
 
     void Start()
     {
@@ -55,6 +54,8 @@ public class MainScript : MonoBehaviour
 
                 break;
             case "rankingButton":
+                PlayerPrefs.SetInt("userScore", 0); //Setting initialize user's score
+
                 SceneManager.LoadScene("Ranking");
                 break;
             case "quitButton":

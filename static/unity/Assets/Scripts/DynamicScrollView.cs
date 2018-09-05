@@ -2,7 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using System;
+using System.Runtime.InteropServices;
 
 public class DynamicScrollView : MonoBehaviour
 {
@@ -10,6 +12,14 @@ public class DynamicScrollView : MonoBehaviour
     public GridLayoutGroup gridLayout;
     public RectTransform scrollContent;
     public ScrollRect scrollRect;
+    public Button registerRankingBtn;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")] 
+    private static extern void RegisterScore();
+#else
+    private static void RegisterScore(){}
+#endif
 
     public struct User {    //For data from Demo.js
         public string userMetaId;
@@ -89,5 +99,8 @@ public class DynamicScrollView : MonoBehaviour
             InitializeList();
             return;
         }
+    }
+    public void OnRegisterClick() {
+        RegisterScore();
     }
 }
