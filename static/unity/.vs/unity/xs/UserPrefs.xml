@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{C3DA89E1-70C6-7D6C-993E-C8F831D35880}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ScrollItem.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Ranking.cs">
     <Files>
-      <File FileName="Assets/Scripts/Ranking.cs" Line="46" Column="53" />
-      <File FileName="Assets/Scripts/DynamicScrollView.cs" Line="115" Column="15" />
+      <File FileName="Assets/Scripts/Ranking.cs" Line="54" Column="6" />
+      <File FileName="Assets/Scripts/DynamicScrollView.cs" Line="79" Column="46" />
       <File FileName="Assets/Scripts/MainScript.cs" Line="102" Column="30" NotebookId="1" />
-      <File FileName="Assets/Scripts/ScrollItem.cs" Line="11" Column="37" NotebookId="1" />
+      <File FileName="Assets/Scripts/ScrollItem.cs" Line="42" Column="9" NotebookId="1" />
       <File FileName="Assets/Scripts/Score.cs" Line="14" Column="14" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

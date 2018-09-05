@@ -9,9 +9,6 @@ let metaGalaga;
 var flag=false;
 
 export default class Demo extends Component {
-
-
-
   constructor(props) {
     super(props);
     var userId
@@ -19,6 +16,7 @@ export default class Demo extends Component {
     this.state = {
       userScore: 0,
       userMeteId: "nop",
+      isOpen: false,
     }
 
     this.unityContent = new UnityContent(
@@ -59,27 +57,52 @@ export default class Demo extends Component {
           });          
         }
       }
-      
-      document.getElementById("rankQRCode").style.display="block";  //게임 끝났을 때 큐알, 버튼 띄우기
-    })
+      document.getElementById("rankButton").style.display="block";  //게임 끝났을 때 큐알, 버튼 띄우기
+      document.getElementById("cancelBtn").style.display="block";  //게임 끝났을 때 큐알, 버튼 띄우기
+
+    });
+
+    this.clickCancel=this.clickCancel.bind(this); //QR update function binding
+  }
+
+  toggleModal = () => {
+    this.setState({isOpen: !this.state.isOpen});
+
+    if(this.state.isOpen){
+      document.getElementById("rankQRCode").style.display="block";
+    }
+    else {
+      document.getElementById("rankQRCode").style.display="none";
+    }
   }
 
   clickCancel() {  //unity한테 메인 씬으로 돌아가라고 요청x
-    document.getElementById("rankQRCode").style.display="none";
+    document.getElementById("rankButton").style.display="none";
+    document.getElementById("cancelBtn").style.display="none";
+    document.getElementById("rankQRCode").style.display="none";  //게임 시작할 때 큐알, 버튼 숨기기
     this.unityContent.send("CancelBtnEvent","ClickCancelButton");
   }
 
   componentDidMount(){
-    document.getElementById("rankQRCode").style.display="none";
+   document.getElementById("rankButton").style.display="none";
+   document.getElementById("cancelBtn").style.display="none";
+   document.getElementById("rankQRCode").style.display="none";  //게임 시작할 때 큐알, 버튼 숨기기
   }
+
   render() {
     return (
       <div>
         <div>
-          <Unity unityContent={this.unityContent} />
+          <Unity unityContent={this.unityContent}/>
         </div>
+        
+        <div>
+          <button id="rankButton" onClick={this.toggleModal.bind(this)} > {"Open Ranking Modal"} </button>
+          <button id="cancelBtn" onClick={this.clickCancel.bind(this)}> {"cancel"} </button>
+        </div>
+
         <div id="rankQRCode">
-          <RankQR value={this.state.userScore} user={this.state.userMeteId} clickCancel={this.clickCancel.bind(this)}/>
+          <RankQR value={this.state.userScore} user={this.state.userMeteId} show={this.state.isOpen} onClose={this.toggleModal.bind(this)}/>
         </div>
       </div>
     );

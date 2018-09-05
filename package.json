@@ -30,9 +30,11 @@
   "dependencies": {
     "express": "^4.16.3",
     "next": "^6.1.1",
+    "prop-types": "^15.6.2",
     "qrcode.react": "^0.8.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-modal": "^3.5.1",
     "react-unity-webgl": "^7.0.6",
     "solc": "^0.4.24",
     "web3": "^1.0.0-beta.35"
