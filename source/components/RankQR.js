@@ -55,9 +55,7 @@ class RankQR extends React.Component{
           return(
             <div className="backdrop" style={backdropStyle}>
                   <div className="modal" style={modalStyle}>
-
-                    <button id="QRBtn" onClick={this.update.bind(this)}>{"QRCode"}</button>
-                    <QRCode id="ScoreQRCode" style={{padding: '2em', marginLeft: '65px'}}
+                    <QRCode id="ScoreQRCode" style={{padding: '2em', marginLeft: '100px'}}
                     value={this.state.value}  // 부모에서 값 가져오기
                     size={this.state.size}
                     fgColor={this.state.fgColor}
@@ -67,6 +65,7 @@ class RankQR extends React.Component{
                     />
 
                     <div className="footer">
+                      <button id="QRBtn" onClick={this.update.bind(this)}>{"QRCode"}</button>
                       <button onClick={this.props.onClose}>Close</button>
                     </div>
 

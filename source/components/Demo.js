@@ -102,8 +102,15 @@ export default class Demo extends Component {
 
   render() {
     return (
-      <div>
-        <div>
+      <div >
+        <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "600px",
+        height: "450px",
+        marginLeft: "500px"
+      }}>
           <Unity unityContent={this.unityContent}/>
         </div>
         

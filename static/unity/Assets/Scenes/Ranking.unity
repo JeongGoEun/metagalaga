@@ -696,7 +696,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -23.3}
+  m_AnchoredPosition: {x: 0, y: -18}
   m_SizeDelta: {x: 279.7, y: 61.95}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &516228090
@@ -740,7 +740,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2011686819}
-        m_MethodName: AddNewElement
+        m_MethodName: OnRegisterClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2130,6 +2130,7 @@ MonoBehaviour:
   gridLayout: {fileID: 1822145629}
   scrollContent: {fileID: 1822145628}
   scrollRect: {fileID: 1073013579}
+  registerRankingBtn: {fileID: 516228090}
   userIndex: 0
 --- !u!114 &2011686820
 MonoBehaviour:
