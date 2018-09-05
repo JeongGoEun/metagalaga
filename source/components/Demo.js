@@ -104,12 +104,10 @@ export default class Demo extends Component {
     return (
       <div >
         <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "600px",
-        height: "450px",
-        marginLeft: "500px"
+        marginLeft: "420px",
+        marginTop: "30px",
+        width: "1024px",
+        height: "768px",
       }}>
           <Unity unityContent={this.unityContent}/>
         </div>
