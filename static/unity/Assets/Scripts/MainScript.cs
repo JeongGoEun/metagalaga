@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 public class MainScript : MonoBehaviour
 {
 
-    public Button loginBtn, rankingBtn, quitBtn;
+    public Button loginBtn, rankingBtn;
     public Button panelLoginBtn, cancelBtn;
     public InputField IdInputField;
     public GameObject loginPanel;
@@ -27,12 +27,6 @@ public class MainScript : MonoBehaviour
     void Start()
     {
         loginPanel.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
 	public void onClick()
@@ -58,14 +52,6 @@ public class MainScript : MonoBehaviour
 
                 SceneManager.LoadScene("Ranking");
                 break;
-            case "quitButton":
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-                        Application.Quit();
-#endif
-                break;
-
         }
     }
 

@@ -42,11 +42,7 @@ public class Ranking : MonoBehaviour
         switch (curButton)
         {
             case "quitButton":
-                #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-                #else
-                        Application.Quit();
-                #endif
+                SceneManager.LoadScene("Main");
                 break;
 
             case "replayButton":
@@ -55,13 +51,6 @@ public class Ranking : MonoBehaviour
                 SceneManager.LoadScene("Stage");
                 Debug.Log("onClick : " + curButton);
                 break;
-
         }
-    }
-
-    // For javascript event
-    public void ClickCancelButton()
-    {
-        SceneManager.LoadScene("Main");
     }
 }

@@ -18,19 +18,22 @@ contract MetaGalaga {
     }
     
     function registerScore(string _userName, uint _userScore) public {
-        require(minScore < _userScore); //new user score higher than minimum score
+        // Verify if user's score is higher than minimum score or not
+        require(minScore < _userScore);
         
-        User memory user;  //definition value
+        // Declare a structure for user’s info
+        User memory user;
         user.userMetaId = msg.sender;
         user.userName = _userName;
         user.userScore = _userScore;
         
+        // Update TOP10 scores.
         rankMap[minIndex] = user;
-        
+
+        // Update minimum score and index
         minIndex = 1;
-        minScore = rankMap[minIndex].userScore; //Start at index 1
-        
-        for(uint i=2; i<=10; i++) {    //set value minimum index, score
+        minScore = rankMap[minIndex].userScore; 
+        for(uint i=2; i<=10; i++) {
             if(rankMap[i].userScore == 0) {
                 minIndex = i;
                 minScore = 0;

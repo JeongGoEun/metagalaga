@@ -57,14 +57,11 @@ export default class Demo extends Component {
           });          
         }
       }
-      document.getElementById("cancelBtn").style.display="block";  //게임 끝났을 때 큐알, 버튼 띄우기
     });
 
     this.unityContent.on("RegisterScore",() => {  //register ranking event from unity
       this.toggleModal();
     });
-
-    this.clickCancel=this.clickCancel.bind(this); //QR update function binding
   }
 
   toggleModal = () => {    
@@ -85,14 +82,7 @@ export default class Demo extends Component {
     console.log("toggleModal state : "+this.state.isOpen);
   }
 
-  clickCancel() {  //unity한테 메인 씬으로 돌아가라고 요청x
-    document.getElementById("cancelBtn").style.display="none";
-    document.getElementById("rankQRCode").style.display="none";  //게임 시작할 때 큐알, 버튼 숨기기
-    this.unityContent.send("CancelBtnEvent","ClickCancelButton");
-  }
-
   componentDidMount(){
-   document.getElementById("cancelBtn").style.display="none";
    document.getElementById("rankQRCode").style.display="none";  //게임 시작할 때 큐알, 버튼 숨기기
   }
 
@@ -110,10 +100,6 @@ export default class Demo extends Component {
         height: "768px",
       }}>
           <Unity unityContent={this.unityContent}/>
-        </div>
-        
-        <div>
-          <button id="cancelBtn" onClick={this.clickCancel.bind(this)}> {"cancel"} </button>
         </div>
 
         <div id="rankQRCode">
