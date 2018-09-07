@@ -1,6 +1,10 @@
 import web3 from '../../ethereum/web3'
 import PropTypes from 'prop-types';
-import metaGalaga from "../../ethereum/metaGalaga.js"
+
+const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
+const mgContractAddr='0x8101487270f5411cf213b8d348a2ab46df66245d';
+let metaGalaga;
+
 var QRCode = require('qrcode.react');
 var React = require('react');
 
@@ -19,24 +23,33 @@ class RankQR extends React.Component{
       }
 
       update = () => {
+        metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
+
         var userScore=this.props.value;  //부모에서 id, score 받아오기
         var userId=this.props.user;
-        var userAccount;
+        let userAccount;
         var QRValue = userId+"/"+userScore.toString(); //구분자 : '/' 
         
         const accounts = web3.eth.getAccounts().then((result) => {
-          userAccount=result[0];
-        }).catch((err) => {
-          console.log(err);
-        });;
+          console.log("default account : "+result[0]);
 
-        /*var request = metaGalaga.methods.registerScore(userId,userScore).send({from: userAccount, value: web3.utils.toWei('1', 'ether'), gasPrice: '1'});
-        var trxRequestUri = "meta://transaction?usage=registerScore&service=https%3A%2F%2Fmetagalaga.metadium.com"
+          var request = metaGalaga.methods.registerScore(userId,userScore).send({from: result[0], value: web3.utils.toWei('0', 'ether'), gasPrice: '1'
+            }).on('transactionHash', function(hash) {
+            console.log(hash);
+            }).on('confirmation', function(confirmationNumber, receipt){
+            console.log(confirmationNumber);
+            }).on('error', console.error);
+            }).catch((err) => {
+            console.log(err);
+          });
+
+        /*var trxRequestUri = "meta://transaction?usage=registerScore&service=https%3A%2F%2Fmetagalaga.metadium.com"
                               + "&to=" + request.params[0].to 
                               + "&value" + request.params[0].value
                               + "&data=" + request.params[0].data;
 
         console.log("trxRequestUri : "+trxRequestUri);*/
+
         document.getElementById("QRBtn").innerHTML=userScore;  //버튼 랭킹 텍스트로 바꾸기
         this.setState({
           value: QRValue

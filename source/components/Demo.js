@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Unity, { UnityContent } from "react-unity-webgl";
 import RankQR from "./RankQR";
 import web3 from '../../ethereum/web3';
-
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
+const mgContractAddr='0x8101487270f5411cf213b8d348a2ab46df66245d';
 
 let metaGalaga;
 var flag=false;
@@ -36,7 +36,7 @@ export default class Demo extends Component {
         this.setState({userScore: userScore});
 
         //get MetaGalaga contract
-        metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), '0x7139045062ed2d678aabf80ccdcec0de768f356f'); 
+        metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
 
         var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
@@ -94,7 +94,7 @@ export default class Demo extends Component {
     return (
       <div >
         <div style={{
-        marginLeft: "420px",
+        marginLeft: "15%",
         marginTop: "30px",
         width: "1024px",
         height: "768px",

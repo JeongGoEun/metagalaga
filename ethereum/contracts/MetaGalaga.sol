@@ -17,7 +17,7 @@ contract MetaGalaga {
         minIndex = 1;
     }
     
-    function registerScore(string _userName, uint _userScore) public {
+    function registerScore(string _userName, uint _userScore) public payable{
         // Verify if user's score is higher than minimum score or not
         require(minScore < _userScore);
         
