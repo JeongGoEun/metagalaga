@@ -2,41 +2,44 @@ import React, { Component } from "react";
 import Unity, { UnityContent } from "react-unity-webgl";
 import RankQR from "./RankQR";
 import web3 from '../../ethereum/web3';
-const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
-const mgContractAddr='0x8101487270f5411cf213b8d348a2ab46df66245d';
+import { Login, Request, SendTransaction } from 'metasdk-react';
 
-let metaGalaga;
+const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
+const mgContractAddr='0xa9a6bbfd3e6d9ae8e1297b34b918941b7f0209a9';
+
+var metaGalaga, userName;
 var flag=false;
+var unityContent;
 
 export default class Demo extends Component {
   constructor(props) {
     super(props);
-    var userId
+    this.request = ['name'];
 
     this.state = {
       userScore: 0,
-      userMeteId: "nop",
-      isOpen: false,
+      userName: "nop",
     }
 
-    this.unityContent = new UnityContent(
+    unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    this.unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
-      userId=userMetaId;
-      this.state.userMeteId=userId;
-      console.log("SendID : "+userId+"..."+this.state.userMeteId);
+    unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
+      this.setState({userName: userMetaId});
+
+      document.getElementById('requestDiv').style.display = "none";
+
+      console.log("SendID : "+this.state.userName);
     });
 
-    this.unityContent.on("GameOver", (userScore) => {  //유니티에서 게임이 끝났을 때
+    unityContent.on("GameOver", (userScore) => {  //유니티에서 게임이 끝났을 때
       if(!flag){
         flag=true;
         this.setState({userScore: userScore});
 
-        //get MetaGalaga contract
-        metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
+        console.log("GameOver : "+this.state.userScore+", "+this.state.userName);
 
         var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
@@ -47,64 +50,81 @@ export default class Demo extends Component {
             _name = result[1];
             _score = result[2];
 
-            this.unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
-            this.unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
-            this.unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
+            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
+            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
 
             //console.log(params);
           }).catch((err) => {
             console.log(err);
           });          
         }
+        document.getElementById('sendTransactionDiv').style.visibility = 'hidden';
       }
     });
 
-    this.unityContent.on("RegisterScore",() => {  //register ranking event from unity
-      this.toggleModal();
+    unityContent.on("RegisterScore",() => {  //register ranking event from unity
+      window.alert('Click Request Button');
+    });
+
+    this.requestCallback.bind(this);    
+  }
+
+  componentDidMount() {
+    flag=false; //for contract information
+    document.getElementById('sendTransactionDiv').style.display = "none";
+    document.getElementById('requestDiv').style.display = "block";
+
+    //get MetaGalaga contract
+    metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
+  }
+
+  requestCallback(arg) {
+    this.request.map((req) => {
+      userName = arg[req];
+      unityContent.send("Canvas","onRequest", userName.toString()); //For Change Login button text
+
+      console.log('got', req, arg[req],unityContent);
+      return req;
     });
   }
 
-  toggleModal = () => {    
-    if(!this.state.isOpen){
-      document.getElementById("rankQRCode").style.display="block";
-
-      this.setState({
-        isOpen: true
-      });
-    }
-    else {
-      document.getElementById("rankQRCode").style.display="none";
-
-      this.setState({
-        isOpen: false
-      });
-    }
-    console.log("toggleModal state : "+this.state.isOpen);
-  }
-
-  componentDidMount(){
-   document.getElementById("rankQRCode").style.display="none";  //게임 시작할 때 큐알, 버튼 숨기기
-  }
-
-  componentWillUpdate() {
-    flag=false; //for contract information
+  SendTransactionCallback(arg) {
+    console.log('requestCallback', arg);
   }
 
   render() {
     return (
       <div >
         <div style={{
-        marginLeft: "15%",
-        marginTop: "30px",
-        width: "1024px",
-        height: "768px",
-      }}>
-          <Unity unityContent={this.unityContent}/>
+          marginLeft: "15%",
+          marginTop: "30px",
+          width: "1024px",
+          height: "768px",
+        }}>
+          <Unity unityContent={unityContent}/>
+        </div>
+        
+        {unityContent != undefined &&
+        <div id='requestDiv'>
+          <Request
+            request={this.request}
+            service = 'MetaGalaga'
+            callback = {this.requestCallback}
+          />
+        </div>
+        }
+
+        <div id='sendTransactionDiv'>
+          <SendTransaction 
+            to = {mgContractAddr}
+            value = ''
+            data= ' '
+            service = 'MetaGalaga'
+            callback={this.SendTransactionCallback}
+          />
         </div>
 
-        <div id="rankQRCode">
-          <RankQR value={this.state.userScore} user={this.state.userMeteId} show={this.state.isOpen} onClose={this.toggleModal}/>
-        </div>
       </div>
     );
   }

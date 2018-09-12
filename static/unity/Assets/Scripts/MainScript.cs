@@ -11,10 +11,11 @@ public class MainScript : MonoBehaviour
 
     public Button loginBtn, rankingBtn;
     public Button panelLoginBtn, cancelBtn;
+    public GameObject playerText;
     public InputField IdInputField;
     public GameObject loginPanel;
 
-    public string userMetaId = "";
+    public string userName = "";
     private bool idCheck = false;
 
     #if UNITY_WEBGL && !UNITY_EDITOR
@@ -55,50 +56,16 @@ public class MainScript : MonoBehaviour
         }
     }
 
-    public void panelFunction()
-    {
-        string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
+    public void onRequest(string _userName) {
+        this.userName = _userName;
+        idCheck = true;
 
-        Debug.Log("panelFunction : " + curButton);
-        switch (curButton)
-        {
-            case "panelLoginBtn":
-                //Modifiy using METAID with smartcontract
-                this.userMetaId = IdInputField.text;
+        playerText.GetComponentInChildren<Text>().text = "PLAYER : " + _userName;
+        loginBtn.GetComponentInChildren<Text>().text = "PLAY";
 
-                if (this.userMetaId == "x")
-                {
-                    //METAID exist in METADIUM
-                    loginPanel.SetActive(false);
-                    loginBtn.GetComponentInChildren<Text>().text = "PLAY";
+        PlayerPrefs.SetString("userName", this.userName);    //store METAID in prefs for interaction
+        Debug.Log("user Name in Unity: " + this.userName);
 
-                    idCheck = true;
-
-                    PlayerPrefs.SetString("userMetaId", this.userMetaId);    //store METAID in prefs for interaction
-                    Debug.Log("user METAID -- 00: " + this.userMetaId);
-
-                    SendId(this.userMetaId);
-                }
-                else
-                {
-                    //METAID Not exist in METADIUM
-                    IdInputField.text = "";
-                    IdInputField.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Not Exist";
-                    IdInputField.GetComponent<InputField>().placeholder.GetComponent<Text>().color = Color.red;
-
-                    idCheck = false;
-                }
-
-                break;
-
-            case "cancelBtn":
-                IdInputField.text = "";
-                IdInputField.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Input METAID";
-                IdInputField.GetComponent<InputField>().placeholder.GetComponent<Text>().color = Color.black;
-
-                loginPanel.SetActive(false);
-                break;
-
-        }
+        SendId(this.userName);
     }
 }

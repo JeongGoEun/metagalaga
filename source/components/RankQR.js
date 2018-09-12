@@ -1,4 +1,4 @@
-import web3 from '../../ethereum/web3'
+import web3 from '../../ethereum/web3';
 import PropTypes from 'prop-types';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
@@ -7,7 +7,8 @@ let metaGalaga;
 
 var QRCode = require('qrcode.react');
 var React = require('react');
-
+var userScore;
+var userName;
 class RankQR extends React.Component{
     constructor(props){
       super(props);
@@ -20,41 +21,33 @@ class RankQR extends React.Component{
           renderAs: 'svg',
         };
         this.update=this.update.bind(this); //QR update function binding
-      }
+    }
 
       update = () => {
         metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
 
-        var userScore=this.props.value;  //부모에서 id, score 받아오기
-        var userId=this.props.user;
-        let userAccount;
-        var QRValue = userId+"/"+userScore.toString(); //구분자 : '/' 
+        userScore=this.props.value;  //부모에서 id, score 받아오기
+        userName=this.props.user;
+        var QRValue = userName+"/"+userScore.toString(); //구분자 : '/' 
         
         const accounts = web3.eth.getAccounts().then((result) => {
           console.log("default account : "+result[0]);
 
-          var request = metaGalaga.methods.registerScore(userId,userScore).send({from: result[0], value: web3.utils.toWei('0', 'ether'), gasPrice: '1'
-            }).on('transactionHash', function(hash) {
-            console.log(hash);
-            }).on('confirmation', function(confirmationNumber, receipt){
-            console.log(confirmationNumber);
-            }).on('error', console.error);
-            }).catch((err) => {
-            console.log(err);
-          });
+        var request = metaGalaga.methods.registerScore(userName,userScore).send({from: result[0], value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
 
-        /*var trxRequestUri = "meta://transaction?usage=registerScore&service=https%3A%2F%2Fmetagalaga.metadium.com"
+        var trxRequestUri = "meta://transaction?usage=registerScore&service=https%3A%2F%2Fmetagalaga.metadium.com"
                               + "&to=" + request.params[0].to 
                               + "&value" + request.params[0].value
                               + "&data=" + request.params[0].data;
 
-        console.log("trxRequestUri : "+trxRequestUri);*/
+        console.log("trxRequestUri : "+trxRequestUri);
 
         document.getElementById("QRBtn").innerHTML=userScore;  //버튼 랭킹 텍스트로 바꾸기
         this.setState({
           value: QRValue
         });
-      };
+        });
+      }
 
       render(){
           // The gray background
@@ -95,8 +88,9 @@ class RankQR extends React.Component{
                       <button id="QRBtn" onClick={this.update.bind(this)}>{"QRCode"}</button>
                       <button onClick={this.props.onClose}>Close</button>
                     </div>
-
                   </div>
+
+                  
             </div>
           );
       }

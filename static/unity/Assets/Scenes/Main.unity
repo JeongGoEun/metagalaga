@@ -765,7 +765,7 @@ MonoBehaviour:
   cancelBtn: {fileID: 1941706889}
   IdInputField: {fileID: 636612799}
   loginPanel: {fileID: 1627711671}
-  userMetaId: 
+  userName: 
 --- !u!1 &742437174
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,7 +833,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0
-  m_Text: Login
+  m_Text: OK
 --- !u!222 &742437177
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1087,7 +1087,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 2
-  m_Text: Input METAID ....
+  m_Text: Input Name ....
 --- !u!222 &1562752582
 CanvasRenderer:
   m_ObjectHideFlags: 0
