@@ -46,6 +46,9 @@ public class DynamicScrollView : MonoBehaviour
             InitializeNewItem(user.userMetaId, user.userName, user.userScore);
         }
         SetContentHeight();
+
+        userIndex = 0;
+        userList.Clear();
     }
 
     private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
@@ -73,7 +76,7 @@ public class DynamicScrollView : MonoBehaviour
 
     public void SetContentHeight()
     {
-        float scrollContentHeight = (gridLayout.transform.childCount * gridLayout.cellSize.y) + ((gridLayout.transform.childCount - 1) * gridLayout.spacing.y);
+        float scrollContentHeight = (10 * gridLayout.cellSize.y) + ((10 - 1) * gridLayout.spacing.y);
         scrollContent.sizeDelta = new Vector2(676, scrollContentHeight);
     }
 
@@ -85,10 +88,12 @@ public class DynamicScrollView : MonoBehaviour
         rankedUsers[userIndex].userName = _name;
     }
     public void SetUserScore(string _score) {   //have problem
+        ClearOldElement();
+
         rankedUsers[userIndex].userScore = int.Parse(_score);
         userList.Add(rankedUsers[userIndex]);
         userIndex++;
-        Debug.Log("Array index : " + userIndex);
+        //Debug.Log("Array index : " + userIndex);
 
         if(userIndex == 10) {
             userList.Sort(delegate (User user1, User user2) {   

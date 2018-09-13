@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import Unity, { UnityContent } from "react-unity-webgl";
-import RankQR from "./RankQR";
 import web3 from '../../ethereum/web3';
 import { Login, Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
 const mgContractAddr='0xa9a6bbfd3e6d9ae8e1297b34b918941b7f0209a9';
 
-var metaGalaga, userName;
+var metaGalaga, userName='test', userScore;
 var flag=false;
 var unityContent;
 
@@ -16,30 +15,20 @@ export default class Demo extends Component {
     super(props);
     this.request = ['name'];
 
-    this.state = {
-      userScore: 0,
-      userName: "nop",
-    }
-
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
     unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
-      this.setState({userName: userMetaId});
-
       document.getElementById('requestDiv').style.display = "none";
-
-      console.log("SendID : "+this.state.userName);
     });
 
-    unityContent.on("GameOver", (userScore) => {  //유니티에서 게임이 끝났을 때
+    unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
       if(!flag){
         flag=true;
-        this.setState({userScore: userScore});
-
-        console.log("GameOver : "+this.state.userScore+", "+this.state.userName);
+        userScore = _userScore;
+        console.log("GameOver : "+userName+", "+userScore);
 
         var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
@@ -59,15 +48,35 @@ export default class Demo extends Component {
             console.log(err);
           });          
         }
-        document.getElementById('sendTransactionDiv').style.visibility = 'hidden';
+          document.getElementById('sendTransactionDiv').style.display = "block";
       }
     });
 
     unityContent.on("RegisterScore",() => {  //register ranking event from unity
-      window.alert('Click Request Button');
+      console.log('RegisterScore');
+      const minScore = metaGalaga.methods.minScore().call();
+      minScore.then((result) => {
+        if(result < userScore) {
+          var request = metaGalaga.methods.registerScore(userName, userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
+      
+          this.to = request.params[0].to;
+          this.value = request.params[0].value;
+          this.data = request.params[0].data;
+
+          console.log('RegisterScore Test: ', this.to +"\n"+ this.value +"\n" + this.data);
+          document.getElementById('sendTransactionDiv').style.display = "block";
+          this.forceUpdate();
+        }
+      });
+
+      this.interval = setInterval(() => {
+        this.checkListUpdate();
+      }, 2000);
     });
 
-    this.requestCallback.bind(this);    
+    this.requestCallback.bind(this); 
+    this.testOnClick = this.testOnClick.bind(this);   
+    this.checkListUpdate = this.checkListUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -77,6 +86,31 @@ export default class Demo extends Component {
 
     //get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  checkListUpdate() {
+    var i, _name, _score, _metaId;
+        for(i=1;i<=10;i++){
+          //get Ranking from contract
+          const ranking = metaGalaga.methods.rankMap(i).call();
+          ranking.then((result) => {
+            _metaId = result[0];
+            _name = result[1];
+            _score = result[2];
+
+            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
+            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
+            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+
+            //console.log(params);
+          }).catch((err) => {
+            console.log(err);
+          });          
+        }
   }
 
   requestCallback(arg) {
@@ -90,7 +124,12 @@ export default class Demo extends Component {
   }
 
   SendTransactionCallback(arg) {
-    console.log('requestCallback', arg);
+    console.log('SendTransactionCallback: ', arg);
+  }
+
+  testOnClick() {
+    console.log('testOnclick');
+    unityContent.send("Canvas","onRequest", userName.toString()); //For Change Login button text
   }
 
   render() {
@@ -104,7 +143,11 @@ export default class Demo extends Component {
         }}>
           <Unity unityContent={unityContent}/>
         </div>
-        
+
+        <a href="#" onClick={this.testOnClick}>
+        Click test
+        </a>
+
         {unityContent != undefined &&
         <div id='requestDiv'>
           <Request
@@ -115,14 +158,18 @@ export default class Demo extends Component {
         </div>
         }
 
+        
         <div id='sendTransactionDiv'>
+        {this.data != undefined &&
           <SendTransaction 
-            to = {mgContractAddr}
-            value = ''
-            data= ' '
+            to = {this.to}
+            value = {this.value}
+            data= {this.data}
+            usage= 'registerScore'
             service = 'MetaGalaga'
             callback={this.SendTransactionCallback}
           />
+        }
         </div>
 
       </div>
