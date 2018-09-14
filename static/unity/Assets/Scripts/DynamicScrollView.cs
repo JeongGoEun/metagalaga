@@ -43,7 +43,9 @@ public class DynamicScrollView : MonoBehaviour
         ClearOldElement();
         foreach (User user in userList)
         {
-            InitializeNewItem(user.userMetaId, user.userName, user.userScore);
+            if (user.userScore != 0) {
+                InitializeNewItem(user.userMetaId, user.userName, user.userScore);
+            }
         }
         SetContentHeight();
 

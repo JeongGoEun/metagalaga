@@ -42,8 +42,7 @@ export default class Demo extends Component {
             unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
             unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
             unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
-
-            //console.log(params);
+            
           }).catch((err) => {
             console.log(err);
           });          
@@ -53,7 +52,6 @@ export default class Demo extends Component {
     });
 
     unityContent.on("RegisterScore",() => {  //register ranking event from unity
-      console.log('RegisterScore');
       const minScore = metaGalaga.methods.minScore().call();
       minScore.then((result) => {
         if(result < userScore) {
@@ -62,16 +60,19 @@ export default class Demo extends Component {
           this.to = request.params[0].to;
           this.value = request.params[0].value;
           this.data = request.params[0].data;
-
-          console.log('RegisterScore Test: ', this.to +"\n"+ this.value +"\n" + this.data);
+                    
           document.getElementById('sendTransactionDiv').style.display = "block";
           this.forceUpdate();
+
+          console.log(document.getElementsByTagName('SendTransaction').to);
+
         }
       });
 
       this.interval = setInterval(() => {
         this.checkListUpdate();
       }, 2000);
+
     });
 
     this.requestCallback.bind(this); 
@@ -84,7 +85,7 @@ export default class Demo extends Component {
     document.getElementById('sendTransactionDiv').style.display = "none";
     document.getElementById('requestDiv').style.display = "block";
 
-    //get MetaGalaga contract
+    //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
 
@@ -106,7 +107,6 @@ export default class Demo extends Component {
             unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
             unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
 
-            //console.log(params);
           }).catch((err) => {
             console.log(err);
           });          
@@ -161,7 +161,7 @@ export default class Demo extends Component {
         
         <div id='sendTransactionDiv'>
         {this.data != undefined &&
-          <SendTransaction 
+          <SendTransaction
             to = {this.to}
             value = {this.value}
             data= {this.data}

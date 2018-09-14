@@ -4,7 +4,7 @@
     <Files>
       <File FileName="Assets/Scripts/MainScript.cs" Line="63" Column="63" />
       <File FileName="Assets/Scripts/Ranking.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/DynamicScrollView.cs" Line="49" Column="18" />
+      <File FileName="Assets/Scripts/DynamicScrollView.cs" Line="79" Column="72" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
