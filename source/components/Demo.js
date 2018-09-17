@@ -47,7 +47,6 @@ export default class Demo extends Component {
             console.log(err);
           });          
         }
-          document.getElementById('sendTransactionDiv').style.display = "block";
       }
     });
 
@@ -61,11 +60,8 @@ export default class Demo extends Component {
           this.value = request.params[0].value;
           this.data = request.params[0].data;
                     
-          document.getElementById('sendTransactionDiv').style.display = "block";
           this.forceUpdate();
-
-          console.log(document.getElementsByTagName('SendTransaction').to);
-
+          document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();
         }
       });
 
