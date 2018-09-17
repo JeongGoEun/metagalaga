@@ -4,6 +4,10 @@
     ReactUnityWebGL.SendId(str);
   },
 
+  Login: function() {
+    ReactUnityWebGL.Login();
+  },
+
   GameOver: function(userScore) {
     ReactUnityWebGL.GameOver(userScore);
   },

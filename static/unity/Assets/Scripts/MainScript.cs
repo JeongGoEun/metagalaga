@@ -10,55 +10,46 @@ public class MainScript : MonoBehaviour
 {
 
     public Button loginBtn, rankingBtn;
-    public Button panelLoginBtn, cancelBtn;
     public GameObject playerText;
-    public InputField IdInputField;
-    public GameObject loginPanel;
 
     public string userName = "";
-    private bool idCheck = false;
 
-    #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void SendId(string userMetaId);
-    #else
+    [DllImport("__Internal")]
+    private static extern void Login();
+#else
     private static void SendId(string userMetaId) {}
+    private static void Login(){}
     #endif
 
-    void Start()
-    {
-        loginPanel.SetActive(false);
-    }
 
 	public void onClick()
     {
-        string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
+        Button curButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        string curButtonName = curButton.name.ToString();
+        string curText = curButton.GetComponentInChildren<Text>().text;
+        Debug.Log("onClick : " + curButton + ", " + curText + ", "+curButtonName);
 
-        Debug.Log("onClick : " + curButton);
-        switch (curButton)
+        switch (curButtonName)
         {
             case "loginButton":
-                if (idCheck == false)
-                {  //Can not Play
-                    loginPanel.SetActive(true);
-                }
+                if(curText == "LOGIN")
+                    Login();
                 else
-                {   //Can Play
                     SceneManager.LoadScene("Stage");    //Change scene
-                }
-
                 break;
             case "rankingButton":
                 PlayerPrefs.SetInt("userScore", 0); //Setting initialize user's score
-
                 SceneManager.LoadScene("Ranking");
                 break;
         }
     }
 
+
     public void onRequest(string _userName) {
         this.userName = _userName;
-        idCheck = true;
 
         playerText.GetComponentInChildren<Text>().text = "PLAYER : " + _userName;
         loginBtn.GetComponentInChildren<Text>().text = "PLAY";

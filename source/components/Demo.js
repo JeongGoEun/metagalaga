@@ -21,7 +21,11 @@ export default class Demo extends Component {
     );
 
     unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
-      document.getElementById('requestDiv').style.display = "none";
+      document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
+    });
+
+    unityContent.on("Login", () => {
+      document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
     });
 
     unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
@@ -79,7 +83,7 @@ export default class Demo extends Component {
   componentDidMount() {
     flag=false; //for contract information
     document.getElementById('sendTransactionDiv').style.display = "none";
-    document.getElementById('requestDiv').style.display = "block";
+    document.getElementById('requestDiv').style.display = "none";
 
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
