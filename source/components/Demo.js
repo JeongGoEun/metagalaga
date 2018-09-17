@@ -75,8 +75,7 @@ export default class Demo extends Component {
 
     });
 
-    this.requestCallback.bind(this); 
-    this.testOnClick = this.testOnClick.bind(this);   
+    this.requestCallback = this.requestCallback.bind(this); 
     this.checkListUpdate = this.checkListUpdate.bind(this);
   }
 
@@ -127,11 +126,6 @@ export default class Demo extends Component {
     console.log('SendTransactionCallback: ', arg);
   }
 
-  testOnClick() {
-    console.log('testOnclick');
-    unityContent.send("Canvas","onRequest", userName.toString()); //For Change Login button text
-  }
-
   render() {
     return (
       <div >
@@ -144,20 +138,19 @@ export default class Demo extends Component {
           <Unity unityContent={unityContent}/>
         </div>
 
-        <a href="#" onClick={this.testOnClick}>
-        Click test
-        </a>
-
         {unityContent != undefined &&
         <div id='requestDiv'>
           <Request
             request={this.request}
             service = 'MetaGalaga'
+            qrsize={256}
+            qrvoffset={20}
+            qrpadding='4em'
+            qrposition='bottom right'
             callback = {this.requestCallback}
           />
         </div>
         }
-
         
         <div id='sendTransactionDiv'>
         {this.data != undefined &&
@@ -167,11 +160,14 @@ export default class Demo extends Component {
             data= {this.data}
             usage= 'registerScore'
             service = 'MetaGalaga'
+            qrsize={256}
+            qrvoffset={20}
+            qrpadding='4em'
+            qrposition='bottom right'
             callback={this.SendTransactionCallback}
           />
         }
         </div>
-
       </div>
     );
   }
