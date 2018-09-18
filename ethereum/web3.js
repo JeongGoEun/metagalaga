@@ -1,15 +1,10 @@
 import Web3 from 'web3';
 let web3;
 
-if(typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
-    web3 = new Web3(window.web3.currentProvider);
-    console.log('MetaMask connected : ');
-    web3.eth.getAccounts().then(console.log);
-}
-/*else {
-    const provider = new Web3.providers.HttpProvider(
-        `https://ropsten.infura.io/v3/${credentials.infura_key}`
-    );
-}*/
+const provider = new Web3.providers.HttpProvider(
+    `http://13.125.247.228:8545/`
+);
+console.log('provider:', provider);
+web3 = new Web3(provider);
 
 export default web3;
