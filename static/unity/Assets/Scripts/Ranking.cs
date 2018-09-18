@@ -37,6 +37,7 @@ public class Ranking : MonoBehaviour
 	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
+        PlayerPrefs.SetInt("userScore", 0); //Init score
 
         Debug.Log("onClick : " + curButton);
         switch (curButton)
@@ -46,8 +47,6 @@ public class Ranking : MonoBehaviour
                 break;
 
             case "replayButton":
-                PlayerPrefs.SetInt("userScore", 0); //Setting initialize user's score
-
                 SceneManager.LoadScene("Stage");
                 Debug.Log("onClick : " + curButton);
                 break;

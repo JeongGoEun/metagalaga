@@ -47,6 +47,26 @@ public class MainScript : MonoBehaviour
         }
     }
 
+    //For javascript event
+    public void SetUserMetaId(string _metaId)
+    {
+        DynamicScrollView.rankedUsers[DynamicScrollView.userIndex].userMetaId = _metaId;
+    }
+    public void SetUserName(string _name)
+    {
+        DynamicScrollView.rankedUsers[DynamicScrollView.userIndex].userName = _name;
+    }
+    public void SetUserScore(string _score)
+    {   //have problem
+        DynamicScrollView.rankedUsers[DynamicScrollView.userIndex].userScore = int.Parse(_score);
+        DynamicScrollView.userList.Add(DynamicScrollView.rankedUsers[DynamicScrollView.userIndex]);
+        DynamicScrollView.userIndex++;
+        //Debug.Log("Array index : " + DynamicScrollView.userIndex);
+
+        if (DynamicScrollView.userIndex == 10) {
+           return;
+        }
+    }
 
     public void onRequest(string _userName) {
         this.userName = _userName;

@@ -6,14 +6,14 @@ import { Login, Request, SendTransaction } from 'metasdk-react';
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
 const mgContractAddr='0xa9a6bbfd3e6d9ae8e1297b34b918941b7f0209a9';
 
-var metaGalaga, userName='test', userScore;
-var flag=false;
+var metaGalaga, userName, userScore;
 var unityContent;
 
 export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.request = ['name'];
+    this.rankedCheck = false;
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
@@ -22,6 +22,7 @@ export default class Demo extends Component {
 
     unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
       document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
+      this.checkListUpdate("Canvas"); //User List update in DynamicScrollView.cs
     });
 
     unityContent.on("Login", () => {
@@ -29,29 +30,20 @@ export default class Demo extends Component {
     });
 
     unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
-      if(!flag){
-        flag=true;
         userScore = _userScore;
-        console.log("GameOver : "+userName+", "+userScore);
-
-        var i, _name, _score, _metaId;
-        for(i=1;i<=10;i++){
-          //get Ranking from contract
-          const ranking = metaGalaga.methods.rankMap(i).call();
-          ranking.then((result) => {
-            _metaId = result[0];
-            _name = result[1];
-            _score = result[2];
-
-            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
-            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
-            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
-            
-          }).catch((err) => {
-            console.log(err);
-          });          
+        if(userScore == 0) {
+          this.rankedCheck = false;
         }
-      }
+
+        if(!this.rankedCheck){ 
+          //First setting Ranked User List in unity
+          this.checkListUpdate("Panel - ScrollVew");
+        }
+        else {
+          //Alrady exist Ranked User List in unity
+          unityContent.send("Panel - ScrollVew","InitializeList",);
+        }
+        console.log('rankedCheck: ',this.rankedCheck);
     });
 
     unityContent.on("RegisterScore",() => {  //register ranking event from unity
@@ -70,7 +62,7 @@ export default class Demo extends Component {
       });
 
       this.interval = setInterval(() => {
-        this.checkListUpdate();
+        this.checkListUpdate("Panel - ScrollVew");
       }, 2000);
 
     });
@@ -80,31 +72,38 @@ export default class Demo extends Component {
   }
 
   componentDidMount() {
-    flag=false; //for contract information
+    //flag=false; //for contract information
     document.getElementById('sendTransactionDiv').style.display = "none";
     document.getElementById('requestDiv').style.display = "none";
+    
+    this.rankedCheck=false;
 
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
 
   componentWillUnmount() {
+    console.log('componentWillUnmount');
     clearInterval(this.interval);
   }
 
-  checkListUpdate() {
+  checkListUpdate(unityObject) {
     var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
           //get Ranking from contract
           const ranking = metaGalaga.methods.rankMap(i).call();
           ranking.then((result) => {
+            if(unityObject == 'Canvas') {
+              this.rankedCheck = true; //Complete Access unity user
+            }
+
             _metaId = result[0];
             _name = result[1];
             _score = result[2];
 
-            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
-            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
-            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+            unityContent.send(unityObject,"SetUserMetaId", _metaId.toString());
+            unityContent.send(unityObject,"SetUserName", _name.toString());
+            unityContent.send(unityObject,"SetUserScore", _score.toString());
 
           }).catch((err) => {
             console.log(err);

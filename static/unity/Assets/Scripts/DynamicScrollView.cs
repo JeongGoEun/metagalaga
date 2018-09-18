@@ -27,9 +27,9 @@ public class DynamicScrollView : MonoBehaviour
         public int userScore;
     }
 
-    public User[] rankedUsers = new User[10];
-    public int userIndex = 0;
-    public List<User> userList = new List<User>();
+    public static User[] rankedUsers = new User[10];
+    public static int userIndex = 0;
+    public static List<User> userList = new List<User>();
 
 	private void ClearOldElement()
     {
@@ -38,8 +38,15 @@ public class DynamicScrollView : MonoBehaviour
         }
     }
 
-    private void InitializeList()
+    public void InitializeList()
     {
+        Debug.Log("InitializeList user length : "+rankedUsers.Length);
+
+        userList.Sort(delegate (User user1, User user2) {
+            //sorting with user score
+            return -1 * (user1.userScore.CompareTo(user2.userScore));
+        });
+
         ClearOldElement();
         foreach (User user in userList)
         {
@@ -98,11 +105,6 @@ public class DynamicScrollView : MonoBehaviour
         //Debug.Log("Array index : " + userIndex);
 
         if(userIndex == 10) {
-            userList.Sort(delegate (User user1, User user2) {   
-                //sorting with user score
-                return -1 * (user1.userScore.CompareTo(user2.userScore));
-            });
-
             InitializeList();
             return;
         }

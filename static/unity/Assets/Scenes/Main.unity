@@ -428,11 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loginBtn: {fileID: 1649617418}
   rankingBtn: {fileID: 635700604}
-  panelLoginBtn: {fileID: 0}
-  cancelBtn: {fileID: 0}
   playerText: {fileID: 1320365750}
-  IdInputField: {fileID: 0}
-  loginPanel: {fileID: 0}
   userName: 
 --- !u!1001 &797406280
 Prefab:
