@@ -15,8 +15,11 @@ public class Ranking : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")] 
     private static extern void GameOver(int userScore);
+    [DllImport("__Internal")]
+    private static extern void StopInterval();
 #else
     private static void GameOver(int userScore) {}
+    private static void StopInterval() {}
 #endif
 
 	private void Awake()
@@ -38,15 +41,17 @@ public class Ranking : MonoBehaviour
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
         PlayerPrefs.SetInt("userScore", 0); //Init score
+        Debug.Log("onClick in unity: " + curButton);
 
-        Debug.Log("onClick : " + curButton);
         switch (curButton)
         {
             case "quitButton":
+                StopInterval();
                 SceneManager.LoadScene("Main");
                 break;
 
             case "replayButton":
+                StopInterval();
                 SceneManager.LoadScene("Stage");
                 Debug.Log("onClick : " + curButton);
                 break;

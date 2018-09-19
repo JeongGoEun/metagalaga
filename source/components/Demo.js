@@ -29,6 +29,9 @@ export default class Demo extends Component {
       document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
     });
 
+    unityContent.on("StopInterval", () => {
+      clearInterval(this.interval);
+    });
     unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
         userScore = _userScore;
         if(userScore == 0) {
@@ -96,7 +99,7 @@ export default class Demo extends Component {
             if(unityObject == 'Canvas') {
               this.rankedCheck = true; //Complete Access unity user
             }
-
+            console.log(result);
             _metaId = result[0];
             _name = result[1];
             _score = result[2];
