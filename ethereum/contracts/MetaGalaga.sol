@@ -1,6 +1,8 @@
 pragma solidity ^0.4.24;
 
 contract MetaGalaga {
+    event RegisterScore(string _userName, uint _userScore);
+    
     struct User {
         address userMetaId; //Meta address
         string userName;    
@@ -46,5 +48,7 @@ contract MetaGalaga {
                 }
             }
         }
+        
+        RegisterScore(_userName, _userScore);
     }
 }

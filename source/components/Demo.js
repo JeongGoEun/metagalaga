@@ -4,7 +4,7 @@ import web3 from '../../ethereum/web3';
 import { Login, Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
-const mgContractAddr='0xa9a6bbfd3e6d9ae8e1297b34b918941b7f0209a9';
+const mgContractAddr='0x3a16898bd858f7858585b72b0c65ed9b9c25c107';
 
 var metaGalaga, userName, userScore;
 var unityContent;
