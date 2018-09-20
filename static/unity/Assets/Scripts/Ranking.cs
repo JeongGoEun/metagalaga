@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -24,6 +22,8 @@ public class Ranking : MonoBehaviour
 
 	private void Awake()
 	{
+        Debug.Log("Ranking.cs Awake()'s userScore : " + userScore);
+
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
 
         if (userScore != 0) {   //바로 넘어오지 않았을 때 game over event 전달
@@ -34,14 +34,12 @@ public class Ranking : MonoBehaviour
             replayBtn.GetComponent<Button>().interactable = false; //main에서 바로 넘어올 때 버튼 비활성화
             GameOver(0);
         }
-        Debug.Log("Ranking.cs Awake()'s userScore : "+userScore);
 	}
 
 	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
         PlayerPrefs.SetInt("userScore", 0); //Init score
-        Debug.Log("onClick in unity: " + curButton);
 
         switch (curButton)
         {

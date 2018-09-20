@@ -2131,7 +2131,6 @@ MonoBehaviour:
   scrollContent: {fileID: 1822145628}
   scrollRect: {fileID: 1073013579}
   registerRankingBtn: {fileID: 516228090}
-  userIndex: 0
 --- !u!114 &2011686820
 MonoBehaviour:
   m_ObjectHideFlags: 0

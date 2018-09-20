@@ -31,36 +31,29 @@ public class DynamicScrollView : MonoBehaviour
     public static int userIndex = 0;
     public static List<User> userList = new List<User>();
 
-	public void ClearOldElement()
-    {
+	public void ClearOldElement() {
         for (int i = 0; i < gridLayout.transform.childCount; i++){
             Destroy(gridLayout.transform.GetChild(i).gameObject);
         }
-        Debug.Log("Finish clear old element");
     }
 
-    public void InitializeList()
-    {
+    public void InitializeList() {
         ClearOldElement();
-        Debug.Log("InitializeList user length : "+rankedUsers.Length);
 
         userList.Sort(delegate (User user1, User user2) {
             //sorting with user score
             return -1 * (user1.userScore.CompareTo(user2.userScore));
         });
 
-        foreach (User user in userList)
-        {
+        foreach (User user in userList) {
             if (user.userScore != 0) {
                 InitializeNewItem(user.userMetaId, user.userName, user.userScore);
-                Debug.Log("Unity Users: " + user.userName);
             }
         }
         SetContentHeight();
-
-        userIndex = 0;
         userList.Clear();
-    }
+        userIndex = 0;
+      }
 
     private void InitializeNewItem(string _metaId, string _name, int _score) //Get userName, userScore from Demo.js
     {
@@ -102,7 +95,6 @@ public class DynamicScrollView : MonoBehaviour
         rankedUsers[userIndex].userScore = int.Parse(_score);
         userList.Add(rankedUsers[userIndex]);
         userIndex++;
-        Debug.Log("Array index : " + userIndex);
 
         if(userIndex == 10) {
             InitializeList();

@@ -13,7 +13,6 @@ export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.request = ['name'];
-    this.rankedCheck = false;
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
@@ -22,7 +21,6 @@ export default class Demo extends Component {
 
     unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
       document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
-      this.checkListUpdate("Canvas"); //User List update in DynamicScrollView.cs
     });
 
     unityContent.on("Login", () => {
@@ -34,19 +32,7 @@ export default class Demo extends Component {
     });
     unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
         userScore = _userScore;
-        if(userScore == 0) {
-          this.rankedCheck = false;
-        }
-
-        if(!this.rankedCheck){ 
-          //First setting Ranked User List in unity
-          this.checkListUpdate("Panel - ScrollVew");
-        }
-        else {
-          //Alrady exist Ranked User List in unity
-          unityContent.send("Panel - ScrollVew","InitializeList",);
-        }
-        console.log('rankedCheck: ',this.rankedCheck);
+        this.checkListUpdate();
     });
 
     unityContent.on("RegisterScore",() => {  //register ranking event from unity
@@ -63,15 +49,12 @@ export default class Demo extends Component {
           document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();
         }
       });
-
-      this.interval = setInterval(() => {
-        this.checkListUpdate("Panel - ScrollVew");
-      }, 2000);
-
     });
 
+    //function binding
     this.requestCallback = this.requestCallback.bind(this); 
     this.checkListUpdate = this.checkListUpdate.bind(this);
+    this.SendTransactionCallback = this.SendTransactionCallback.bind(this);
   }
 
   componentDidMount() {
@@ -79,34 +62,27 @@ export default class Demo extends Component {
     document.getElementById('sendTransactionDiv').style.display = "none";
     document.getElementById('requestDiv').style.display = "none";
     
-    this.rankedCheck=false;
-
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
     clearInterval(this.interval);
   }
 
-  checkListUpdate(unityObject) {
+  checkListUpdate() {
     var i, _name, _score, _metaId;
         for(i=1;i<=10;i++){
           //get Ranking from contract
           const ranking = metaGalaga.methods.rankMap(i).call();
           ranking.then((result) => {
-            if(unityObject == 'Canvas') {
-              this.rankedCheck = true; //Complete Access unity user
-            }
-            console.log(result);
             _metaId = result[0];
             _name = result[1];
             _score = result[2];
 
-            unityContent.send(unityObject,"SetUserMetaId", _metaId.toString());
-            unityContent.send(unityObject,"SetUserName", _name.toString());
-            unityContent.send(unityObject,"SetUserScore", _score.toString());
+            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
+            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
+            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
 
           }).catch((err) => {
             console.log(err);
@@ -119,13 +95,18 @@ export default class Demo extends Component {
       userName = arg[req];
       unityContent.send("Canvas","onRequest", userName.toString()); //For Change Login button text
 
-      console.log('got', req, arg[req],unityContent);
       return req;
     });
   }
 
   SendTransactionCallback(arg) {
-    console.log('SendTransactionCallback: ', arg);
+    var receipt = web3.eth.getTransactionReceipt(arg['txid']);
+    if(receipt != null) {
+      //start interval for updating dynamic scroll view 
+      console.log('Score board update');
+      this.checkListUpdate();
+      document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();  //enable SendTransaction QR Code
+    }
   }
 
   render() {
