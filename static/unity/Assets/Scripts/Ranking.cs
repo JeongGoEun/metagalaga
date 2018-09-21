@@ -22,9 +22,8 @@ public class Ranking : MonoBehaviour
 
 	private void Awake()
 	{
-        Debug.Log("Ranking.cs Awake()'s userScore : " + userScore);
-
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
+        Debug.Log("Ranking.cs Awake()'s userScore : " + userScore);
 
         if (userScore != 0) {   //바로 넘어오지 않았을 때 game over event 전달
             replayBtn.GetComponent<Button>().interactable = true;

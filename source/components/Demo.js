@@ -4,15 +4,19 @@ import web3 from '../../ethereum/web3';
 import { Login, Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
-const mgContractAddr='0x3a16898bd858f7858585b72b0c65ed9b9c25c107';
+const mgContractAddr='0x0728a58a2bb52e36211b7d796abffdf73961a5da';
 
 var metaGalaga, userName, userScore;
 var unityContent;
+
+// Callbackfunction binding
+var registerUpdate;
 
 export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.request = ['name'];
+    self = this;
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
@@ -35,9 +39,8 @@ export default class Demo extends Component {
         this.checkListUpdate();
     });
 
-    unityContent.on("RegisterScore",() => {  //register ranking event from unity
-      const minScore = metaGalaga.methods.minScore().call();
-      minScore.then((result) => {
+    unityContent.on("RegisterScore", async () => {  //register ranking event from unity
+      await metaGalaga.methods.minScore().call().then(async (result) => {
         if(result < userScore) {
           var request = metaGalaga.methods.registerScore(userName, userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
       
@@ -51,10 +54,8 @@ export default class Demo extends Component {
       });
     });
 
-    //function binding
-    this.requestCallback = this.requestCallback.bind(this); 
-    this.checkListUpdate = this.checkListUpdate.bind(this);
-    this.SendTransactionCallback = this.SendTransactionCallback.bind(this);
+    // Binding
+    registerUpdate = this.registerUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -70,24 +71,24 @@ export default class Demo extends Component {
     clearInterval(this.interval);
   }
 
-  checkListUpdate() {
+  async checkListUpdate() {
     var i, _name, _score, _metaId;
-        for(i=1;i<=10;i++){
-          //get Ranking from contract
-          const ranking = metaGalaga.methods.rankMap(i).call();
-          ranking.then((result) => {
-            _metaId = result[0];
-            _name = result[1];
-            _score = result[2];
+    for (i=1; i <= 10; i++) {
+      //send Ranking from contract to Unity
+      await metaGalaga.methods.rankMap(i).call().then((result) => this.sendUserInfo(result));
+     }
+  }
 
-            unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
-            unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
-            unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+  async sendUserInfo(result) {
+    console.log('Result: ',result);
 
-          }).catch((err) => {
-            console.log(err);
-          });          
-        }
+    var _metaId = result[0];
+    var _name = result[1];
+    var _score = result[2];
+
+    unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
+    unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
+    unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
   }
 
   requestCallback(arg) {
@@ -99,25 +100,28 @@ export default class Demo extends Component {
     });
   }
 
-  SendTransactionCallback(arg) {
-    var receipt = web3.eth.getTransactionReceipt(arg['txid']);
-    if(receipt != null) {
-      //start interval for updating dynamic scroll view 
-      console.log('Score board update');
+  async sendTransactionCallback(arg) {
+    var receipt=null;
+    for(; receipt == null; ) {
+    receipt = await web3.eth.getTransactionReceipt(arg['txid']);
+    setTimeout(console.log('timer'), 1000);
+    }
+
+    registerUpdate(receipt);
+  }
+
+  registerUpdate(receipt) {
+    if (receipt != null) {
       this.checkListUpdate();
       document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();  //enable SendTransaction QR Code
+      console.log('Score board update');
     }
   }
 
   render() {
     return (
       <div >
-        <div style={{
-          marginLeft: "15%",
-          marginTop: "30px",
-          width: "1024px",
-          height: "768px",
-        }}>
+        <div style={styles.unityContainer}>
           <Unity unityContent={unityContent}/>
         </div>
 
@@ -147,7 +151,7 @@ export default class Demo extends Component {
             qrvoffset={20}
             qrpadding='4em'
             qrposition='bottom right'
-            callback={this.SendTransactionCallback}
+            callback={this.sendTransactionCallback}
           />
         }
         </div>
@@ -155,3 +159,11 @@ export default class Demo extends Component {
     );
   }
 }
+  const styles = {
+    unityContainer: {
+      marginLeft: "15%",
+      marginTop: "30px",
+      width: "1024px",
+      height: "768px",
+    },
+  };

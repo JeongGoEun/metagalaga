@@ -69,6 +69,7 @@ public class Player : MonoBehaviour {
 
             //set userScore in prefs for interaction
             userScore = GameObject.Find("Score GUI").GetComponent<Score>().GetScore();
+            Debug.Log("User game score in Player.cs : " + userScore); 
             PlayerPrefs.SetInt("userScore", userScore);
 
             SceneManager.LoadScene("Ranking");  //convert to the ranking scene
