@@ -16,14 +16,13 @@ export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.request = ['name'];
-    self = this;
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    unityContent.on("SendId", (userMetaId) => { //유니티에서 오는 것
+    unityContent.on("SendId", (userMetaId) => {
       document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
     });
 
@@ -34,12 +33,13 @@ export default class Demo extends Component {
     unityContent.on("StopInterval", () => {
       clearInterval(this.interval);
     });
-    unityContent.on("GameOver", (_userScore) => {  //유니티에서 게임이 끝났을 때
+    unityContent.on("GameOver", (_userScore) => {
         userScore = _userScore;
         this.checkListUpdate();
     });
 
-    unityContent.on("RegisterScore", async () => {  //register ranking event from unity
+    
+    unityContent.on("RegisterScore", async () => {  
       await metaGalaga.methods.minScore().call().then(async (result) => {
         if(result < userScore) {
           var request = metaGalaga.methods.registerScore(userName, userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
@@ -59,7 +59,6 @@ export default class Demo extends Component {
   }
 
   componentDidMount() {
-    //flag=false; //for contract information
     document.getElementById('sendTransactionDiv').style.display = "none";
     document.getElementById('requestDiv').style.display = "none";
     
@@ -74,14 +73,12 @@ export default class Demo extends Component {
   async checkListUpdate() {
     var i, _name, _score, _metaId;
     for (i=1; i <= 10; i++) {
-      //send Ranking from contract to Unity
+      //Send Ranking from Contract to Unity
       await metaGalaga.methods.rankMap(i).call().then((result) => this.sendUserInfo(result));
      }
   }
 
   async sendUserInfo(result) {
-    console.log('Result: ',result);
-
     var _metaId = result[0];
     var _name = result[1];
     var _score = result[2];
@@ -94,7 +91,7 @@ export default class Demo extends Component {
   requestCallback(arg) {
     this.request.map((req) => {
       userName = arg[req];
-      unityContent.send("Canvas","onRequest", userName.toString()); //For Change Login button text
+      unityContent.send("Canvas", "onRequest", userName.toString()); //For Change Login button text
 
       return req;
     });
@@ -103,19 +100,15 @@ export default class Demo extends Component {
   async sendTransactionCallback(arg) {
     var receipt=null;
     for(; receipt == null; ) {
-    receipt = await web3.eth.getTransactionReceipt(arg['txid']);
-    setTimeout(console.log('timer'), 1000);
+      receipt = await web3.eth.getTransactionReceipt(arg['txid']);
+      setTimeout(console.log('timer'), 1000);
     }
-
     registerUpdate(receipt);
   }
 
   registerUpdate(receipt) {
-    if (receipt != null) {
-      this.checkListUpdate();
-      document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();  //enable SendTransaction QR Code
-      console.log('Score board update');
-    }
+    this.checkListUpdate();
+    document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();  //enable SendTransaction QR Code
   }
 
   render() {
