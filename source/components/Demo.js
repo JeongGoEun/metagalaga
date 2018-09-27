@@ -23,33 +23,34 @@ export default class Demo extends Component {
     );
 
     unityContent.on("SendId", (userMetaId) => {
-      document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
+      document.getElementById('requestID').click();  
     });
 
     unityContent.on("Login", () => {
-      document.getElementById('requestDiv').children[0].getElementsByTagName('button')[0].click();
+      document.getElementById('requestID').click();  
     });
 
     unityContent.on("StopInterval", () => {
       clearInterval(this.interval);
     });
+    
     unityContent.on("GameOver", (_userScore) => {
         userScore = _userScore;
         this.checkListUpdate();
     });
 
-    
     unityContent.on("RegisterScore", async () => {  
       await metaGalaga.methods.minScore().call().then(async (result) => {
         if(result < userScore) {
-          var request = metaGalaga.methods.registerScore(userName, userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
+          var request = metaGalaga.methods.registerScore(userName, userScore)
+                        .send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
       
           this.to = request.params[0].to;
           this.value = request.params[0].value;
           this.data = request.params[0].data;
                     
           this.forceUpdate();
-          document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();
+          document.getElementById('sendTransactionID').click();  
         }
       });
     });
@@ -91,8 +92,8 @@ export default class Demo extends Component {
   requestCallback(arg) {
     this.request.map((req) => {
       userName = arg[req];
-      unityContent.send("Canvas", "onRequest", userName.toString()); //For Change Login button text
-
+      //For Change Login button text
+      unityContent.send("Canvas", "onRequest", userName.toString()); 
       return req;
     });
   }
@@ -108,7 +109,9 @@ export default class Demo extends Component {
 
   registerUpdate(receipt) {
     this.checkListUpdate();
-    document.getElementById('sendTransactionDiv').children[0].getElementsByTagName('button')[0].click();  //enable SendTransaction QR Code
+
+    //Enable SendTransaction QR Code
+    document.getElementById('sendTransactionID').click();  
   }
 
   render() {
@@ -121,6 +124,7 @@ export default class Demo extends Component {
         {unityContent != undefined &&
         <div id='requestDiv'>
           <Request
+            id = 'requestID'
             request={this.request}
             service = 'MetaGalaga'
             qrsize={256}
@@ -130,11 +134,12 @@ export default class Demo extends Component {
             callback = {this.requestCallback}
           />
         </div>
-        }
+        } 
         
         <div id='sendTransactionDiv'>
         {this.data != undefined &&
           <SendTransaction
+            id = 'sendTransactionID'
             to = {this.to}
             value = {this.value}
             data= {this.data}
