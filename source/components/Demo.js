@@ -32,7 +32,7 @@ export default class Demo extends Component {
     });
 
     unityContent.on("Login", () => {
-      document.getElementById('requestID').click();  
+      document.getElementById('requestID').click();
     });
 
     unityContent.on("StopInterval", () => {
@@ -64,9 +64,9 @@ export default class Demo extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('sendTransactionDiv').style.display = "none";
-    document.getElementById('requestDiv').style.display = "none";
-    
+    document.getElementById('requestDiv').style.visibility = "hidden";
+    document.getElementById('sendTransactionDiv').style.visibility = "hidden";
+
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
@@ -125,24 +125,23 @@ export default class Demo extends Component {
       <div >
         <div style={styles.unityContainer}>
           <Unity unityContent={unityContent}/>
-        </div>
 
+        <div id='requestDiv' style={styles.metaSdkComponent}>
         {unityContent != undefined &&
-        <div id='requestDiv'>
-          <Request
+          <Request 
             id = 'requestID'
             request={this.request}
             service = 'MetaGalaga'
             qrsize={256}
-            qrvoffset={20}
-            qrpadding='4em'
-            qrposition='bottom right'
+            qrvoffset={170}
+            qrpadding='3em'
+            qrposition='top left'
             callback = {this.requestCallback}
           />
-        </div>
-        }     
+        }
+        </div> 
         
-        <div id='sendTransactionDiv'>
+        <div id='sendTransactionDiv' style={styles.metaSdkComponent}>
         {this.data != undefined &&
           <SendTransaction
             id = 'sendTransactionID'
@@ -152,12 +151,14 @@ export default class Demo extends Component {
             usage= 'registerScore'
             service = 'MetaGalaga'
             qrsize={256}
-            qrvoffset={20}
-            qrpadding='4em'
-            qrposition='bottom right'
+            qrvoffset={170}
+            qrpadding='3em'
+            qrposition='top left'
             callback={this.sendTransactionCallback}
           />
         }
+        </div>
+
         </div>
       </div>
     );
@@ -165,9 +166,12 @@ export default class Demo extends Component {
 }
   const styles = {
     unityContainer: {
-      marginLeft: "15%",
+      marginLeft: "20%",
       marginTop: "30px",
       width: "1024px",
       height: "768px",
+    },
+    metaSdkComponent: {
+      marginLeft: "32%",
     },
   };
