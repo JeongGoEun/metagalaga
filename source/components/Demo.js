@@ -12,6 +12,11 @@ var unityContent;
 // Callbackfunction binding
 var registerUpdate;
 
+// Override alert function
+var _alert = window.alert;
+_alert = (function(message){console.log(message)});
+window.alert = _alert;
+
 export default class Demo extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +59,6 @@ export default class Demo extends Component {
         }
       });
     });
-
     // Binding
     registerUpdate = this.registerUpdate.bind(this);
   }
@@ -159,9 +163,6 @@ export default class Demo extends Component {
     );
   }
 }
-
-window.onerror = function(){ return true; } // IGNORE ALL ERROR JAVASCRIPT!    
-
   const styles = {
     unityContainer: {
       marginLeft: "15%",
