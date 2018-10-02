@@ -6,7 +6,7 @@ public class ScrollItem : MonoBehaviour
 {
     
     #region PUBLIC_VARIABLES
-    public Text nameText, scoreText, metaIdText;
+    public Text nameText, scoreText, metaIdText, timestampText;
 
     public DynamicScrollView dynamicScrollView;
     #endregion
@@ -20,6 +20,7 @@ public class ScrollItem : MonoBehaviour
         nameText.text = transform.GetChild(0).name;
         scoreText.text = transform.GetChild(2).name;
         metaIdText.text = transform.GetChild(1).name;
+        timestampText.text = transform.GetChild(3).name;
     }
     #endregion
 

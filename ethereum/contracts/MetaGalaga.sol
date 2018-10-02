@@ -1,25 +1,29 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
-contract MetaGalaga {
+import "./Ownable.sol";
+
+contract MetaGalaga is Ownable {
+    
     event RegisterScore(string _userName, uint _userScore);
     
     struct User {
-        address userMetaId; //Meta address
+        address userMetaId; 
         string userName;    
-        uint userScore;  //MetaGalaga score
+        uint userScore;
+        uint timestamp;
     }
     
     mapping (uint => User) public rankMap;
     
     uint public minScore;
-    uint public minIndex;    //start index 1
+    uint public minIndex;
     
     constructor() public {
         minScore = 0;
         minIndex = 1;
     }
     
-    function registerScore(string _userName, uint _userScore) public payable{
+    function registerScore(string _userName, uint _userScore) public {
         // Verify if user's score is higher than minimum score or not
         require(minScore < _userScore);
         
@@ -28,6 +32,7 @@ contract MetaGalaga {
         user.userMetaId = msg.sender;
         user.userName = _userName;
         user.userScore = _userScore;
+        user.timestamp = block.timestamp;
         
         // Update TOP10 scores.
         rankMap[minIndex] = user;
@@ -50,5 +55,13 @@ contract MetaGalaga {
         }
         
         RegisterScore(_userName, _userScore);
+    }
+    
+    function clearScore() public onlyOwner {
+        for(uint i=1; i<=10; i++) {
+            delete rankMap[i];
+        }
+        minScore = 0;
+        minIndex = 1;
     }
 }

@@ -4,10 +4,10 @@ import web3 from '../../ethereum/web3';
 import { Login, Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
-const mgContractAddr='0x0728a58a2bb52e36211b7d796abffdf73961a5da';
+const mgContractAddr='0xa86fb39bfad3271ab90dc7bd451b828a947c36f8';
 
 var metaGalaga, userName, userScore;
-var unityContent;
+var unityContent; 
 
 // Callbackfunction binding
 var registerUpdate;
@@ -72,7 +72,7 @@ export default class Demo extends Component {
   }
 
   async checkListUpdate() {
-    var i, _name, _score, _metaId;
+    var i;
     for (i=1; i <= 10; i++) {
       //Send Ranking from Contract to Unity
       await metaGalaga.methods.rankMap(i).call().then((result) => this.sendUserInfo(result));
@@ -83,10 +83,12 @@ export default class Demo extends Component {
     var _metaId = result[0];
     var _name = result[1];
     var _score = result[2];
+    var _timestamp = result[3];
 
     unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
     unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
     unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
+    unityContent.send("Panel - ScrollVew","SetUserTimestamp", _timestamp.toString());
   }
 
   requestCallback(arg) {
@@ -134,7 +136,7 @@ export default class Demo extends Component {
             callback = {this.requestCallback}
           />
         </div>
-        } 
+        }     
         
         <div id='sendTransactionDiv'>
         {this.data != undefined &&
@@ -157,6 +159,9 @@ export default class Demo extends Component {
     );
   }
 }
+
+window.onerror = function(){ return true; } // IGNORE ALL ERROR JAVASCRIPT!    
+
   const styles = {
     unityContainer: {
       marginLeft: "15%",
