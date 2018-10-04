@@ -1,9 +1,6 @@
 import Web3 from 'web3';
-let web3;
+import web3config from './web3-config.json'
 
-const provider = new Web3.providers.HttpProvider(
-    `http://13.125.247.228:8545`
-);
-web3 = new Web3(provider);
+const web3 = new Web3(new Web3.providers.HttpProvider(web3config.url));
 
 export default web3;

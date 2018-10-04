@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import Unity, { UnityContent } from "react-unity-webgl";
 import web3 from '../../ethereum/web3';
+import web3config from '../../ethereum/web3-config.json';
 import { Login, Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
-const mgContractAddr='0xa86fb39bfad3271ab90dc7bd451b828a947c36f8';
+const mgContractAddr=web3config.contractAddr;
 
 var metaGalaga, userName, userScore;
 var unityContent; 
@@ -32,7 +33,7 @@ export default class Demo extends Component {
     });
 
     unityContent.on("Login", () => {
-      document.getElementById('requestID').click();
+      document.getElementById('requestID').click();  
     });
 
     unityContent.on("StopInterval", () => {
@@ -66,7 +67,7 @@ export default class Demo extends Component {
   componentDidMount() {
     document.getElementById('requestDiv').style.visibility = "hidden";
     document.getElementById('sendTransactionDiv').style.visibility = "hidden";
-
+    
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
