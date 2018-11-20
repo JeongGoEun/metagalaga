@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using UnityEditor;
 
 public class Player : MonoBehaviour {
     
     Spaceship spaceship;
     bool paused = false;
-    private int userScore=0;
+    private int userScore = 0;
 
-    IEnumerator Start () { //시간 걸리는 처리 할 때 Coroutine을 사용한다.
+	IEnumerator Start () { //시간 걸리는 처리 할 때 Coroutine을 사용한다.
         spaceship = GetComponent<Spaceship>();
 
         while(true){
             spaceship.Shot(transform);  //탄은 플레이어와 같은 위치
-
             GetComponent<AudioSource>().Play();
-
             yield return new WaitForSeconds(spaceship.shotDelay); // 0.05 wating
         }
 	}
@@ -73,7 +73,6 @@ public class Player : MonoBehaviour {
             PlayerPrefs.SetInt("userScore", userScore);
 
             SceneManager.LoadScene("Ranking");  //convert to the ranking scene
-
         }
 	}
 }

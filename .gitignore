@@ -1,6 +1,8 @@
 .next
 node_modules/*
 
+package-lock.json
+
 static/unity/Temp/*
 static/unity/obj/*
 static/unity/Library/metadata/*

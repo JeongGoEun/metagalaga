@@ -20,10 +20,10 @@ public class Ranking : MonoBehaviour
     private static void StopInterval() {}
 #endif
 
-	private void Awake()
+	private void Start()
 	{
         userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
-        Debug.Log("Ranking.cs Awake()'s userScore : " + userScore);
+        Debug.Log("Ranking.cs Start()'s userScore : " + userScore);
 
         if (userScore != 0) {   //바로 넘어오지 않았을 때 game over event 전달
             replayBtn.GetComponent<Button>().interactable = true;
@@ -38,7 +38,11 @@ public class Ranking : MonoBehaviour
 	public void onClick()
     {
         string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
-        PlayerPrefs.SetInt("userScore", 0); //Init score
+
+        //Initialize
+        PlayerPrefs.SetInt("userScore", 0);
+        DynamicScrollView.registerCheck = false;
+        DynamicScrollView.curUserTimestamp = 0;
 
         switch (curButton)
         {
@@ -50,7 +54,6 @@ public class Ranking : MonoBehaviour
             case "replayButton":
                 StopInterval();
                 SceneManager.LoadScene("Stage");
-                Debug.Log("onClick : " + curButton);
                 break;
         }
     }

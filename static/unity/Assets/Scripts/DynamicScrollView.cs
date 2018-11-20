@@ -13,7 +13,6 @@ public class DynamicScrollView : MonoBehaviour
     public RectTransform scrollContent;
     public ScrollRect scrollRect;
     public Button registerRankingBtn;
-    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
 
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -31,8 +30,12 @@ public class DynamicScrollView : MonoBehaviour
     }
 
     public static User[] rankedUsers = new User[10];
-    public static int userIndex = 0;
     public static List<User> userList = new List<User>();
+    public static int userIndex = 0;
+    public static int curUserTimestamp = 0;
+    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+    public static bool registerCheck = false;
+
 
 	public void ClearOldElement() {
         for (int i = 0; i < gridLayout.transform.childCount; i++){
@@ -40,13 +43,18 @@ public class DynamicScrollView : MonoBehaviour
         }
     }
 
-    public void InitializeList() {
+	public void InitializeList() {
         ClearOldElement();
 
+        //Sort using user score
         userList.Sort(delegate (User user1, User user2) {
-            //sorting with user score
             return -1 * (user1.userScore.CompareTo(user2.userScore));
         });
+
+        //Find new user timestamp
+        if (registerCheck) {
+            curUserTimestamp = GetCurUserTimestamp(userList);
+        }
 
         foreach (User user in userList) {
             if (user.userScore != 0) {
@@ -56,18 +64,19 @@ public class DynamicScrollView : MonoBehaviour
         SetContentHeight();
         userList.Clear();
         userIndex = 0;
+        registerCheck = true;
       }
 
-    private void InitializeNewItem(string _metaId, string _name, int _score, int _timestamp) //Get userName, userScore from Demo.js
-    {
+    //Get userName, userScore from Demo.js
+    private void InitializeNewItem(string _metaId, string _name, int _score, int _timestamp) {
         GameObject newItem = Instantiate(item) as GameObject;
 
         newItem.transform.GetChild(0).name = _name;
         newItem.transform.GetChild(1).name = _metaId;
         newItem.transform.GetChild(2).name = _score.ToString();
+
         //setting time for timestamp
-        newItem.transform.GetChild(3).name = timeToStr((double)_timestamp);
-        Debug.Log("newItem.transform.GetChild(3) : " + newItem.transform.GetChild(3));
+        newItem.transform.GetChild(3).name = _timestamp.ToString();
 
         newItem.transform.SetParent(gridLayout.transform);
         newItem.transform.localScale = Vector3.one;
@@ -84,8 +93,7 @@ public class DynamicScrollView : MonoBehaviour
         }
     }
 
-    public void SetContentHeight()
-    {
+    public void SetContentHeight() {
         float scrollContentHeight = (10 * gridLayout.cellSize.y) + ((10 - 1) * gridLayout.spacing.y);
         scrollContent.sizeDelta = new Vector2(676, scrollContentHeight);
     }
@@ -100,16 +108,14 @@ public class DynamicScrollView : MonoBehaviour
     public void SetUserScore(string _score) {
         rankedUsers[userIndex].userScore = int.Parse(_score);
     }
-    public void SetUserTimestamp(string _timestamp)
-    {
+    public void SetUserTimestamp(string _timestamp) {
         int _time = int.Parse(_timestamp);
         rankedUsers[userIndex].timestamp = _time;
 
         userList.Add(rankedUsers[userIndex]);
         userIndex++;
 
-        if (userIndex == 10)
-        {
+        if (userIndex == 10) {
             InitializeList();
             return;
         }
@@ -118,16 +124,21 @@ public class DynamicScrollView : MonoBehaviour
         RegisterScore();
     }
 
-    public string timeToStr(double _timestamp) {
-        string[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-        DateTime dateTime = UnixTimeToDateTime(_timestamp);
+    public int GetCurUserTimestamp(List<User> userList) {
+        int rtnTimestamp = 0;
+        // Get current unix time
+        int curTime = (int)(System.DateTime.UtcNow - Epoch).TotalSeconds;
 
-        Debug.Log("timeToStr: " + _timestamp + "," + dateTime + "," +DateTime.Now);
-        return (dateTime.Day.ToString() + "." + months[dateTime.Month - 1] + "." + dateTime.Year.ToString());  
-    }
+        // Initialize minimum time
+        int minTime = 999999999;
 
-    public static DateTime UnixTimeToDateTime(double unixTimeStamp)
-    {
-        return Epoch.AddSeconds(unixTimeStamp).ToUniversalTime();
+        foreach(User user in userList) {
+            if (curTime - user.timestamp < minTime) {
+                rtnTimestamp = user.timestamp;
+                minTime = curTime - user.timestamp;
+            }
+        }
+        Debug.Log("GetCurUserTimestamp: " + rtnTimestamp);
+        return rtnTimestamp;
     }
 }

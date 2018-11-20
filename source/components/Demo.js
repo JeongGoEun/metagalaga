@@ -7,7 +7,7 @@ import { Login, Request, SendTransaction } from 'metasdk-react';
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
 const mgContractAddr=web3config.contractAddr;
 
-var metaGalaga, userName, userScore;
+var metaGalaga, userName, userScore, highscore=0;
 var unityContent; 
 
 // Callbackfunction binding
@@ -17,6 +17,9 @@ var registerUpdate;
 var _alert = window.alert;
 _alert = (function(message){console.log(message)});
 window.alert = _alert;
+
+// For Unity Test
+var test = true;
 
 export default class Demo extends Component {
   constructor(props) {
@@ -29,11 +32,18 @@ export default class Demo extends Component {
     );
 
     unityContent.on("SendId", (userMetaId) => {
-      document.getElementById('requestID').click();  
+      if( test ) {  }
+      else {document.getElementById('requestID').click();  }
     });
 
     unityContent.on("Login", () => {
-      document.getElementById('requestID').click();  
+      this.getHighScore().then(() => {
+        if( test ) {
+          unityContent.send("Canvas", "onRequest", 'Alpha');
+          unityContent.send("Canvas", "SetHighScore", highscore.toString());
+        }
+        else { document.getElementById('requestID').click();  }
+      });
     });
 
     unityContent.on("StopInterval", () => {
@@ -41,12 +51,14 @@ export default class Demo extends Component {
     });
     
     unityContent.on("GameOver", (_userScore) => {
-        userScore = _userScore;
-        this.checkListUpdate();
+      userScore = _userScore;
+      this.checkListUpdate();
     });
 
     unityContent.on("RegisterScore", async () => {  
       await metaGalaga.methods.minScore().call().then(async (result) => {
+        // For Test
+        userName = 'Alpha';
         if(result < userScore) {
           var request = metaGalaga.methods.registerScore(userName, userScore)
                         .send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
@@ -54,7 +66,7 @@ export default class Demo extends Component {
           this.to = request.params[0].to;
           this.value = request.params[0].value;
           this.data = request.params[0].data;
-                    
+
           this.forceUpdate();
           document.getElementById('sendTransactionID').click();  
         }
@@ -77,23 +89,22 @@ export default class Demo extends Component {
   }
 
   async checkListUpdate() {
-    var i;
-    for (i=1; i <= 10; i++) {
+    for (var i=1; i <= 10; i++) {
       //Send Ranking from Contract to Unity
-      await metaGalaga.methods.rankMap(i).call().then((result) => this.sendUserInfo(result));
+      await metaGalaga.methods.rankMap(i).call().then((result) => {
+        unityContent.send("Panel - ScrollVew","SetUserMetaId", result['userMetaId'].toString());
+        unityContent.send("Panel - ScrollVew","SetUserName", result['userName'].toString());
+        unityContent.send("Panel - ScrollVew","SetUserScore", result['userScore'].toString());
+        unityContent.send("Panel - ScrollVew","SetUserTimestamp", result['timestamp'].toString());
+      });
      }
   }
 
-  async sendUserInfo(result) {
-    var _metaId = result[0];
-    var _name = result[1];
-    var _score = result[2];
-    var _timestamp = result[3];
-
-    unityContent.send("Panel - ScrollVew","SetUserMetaId", _metaId.toString());
-    unityContent.send("Panel - ScrollVew","SetUserName", _name.toString());
-    unityContent.send("Panel - ScrollVew","SetUserScore", _score.toString());
-    unityContent.send("Panel - ScrollVew","SetUserTimestamp", _timestamp.toString());
+  async getHighScore() {
+    for (var i=1; i <= 10; i++) {
+      //Send Ranking from Contract to Unity
+      await metaGalaga.methods.rankMap(i).call().then((result) => highscore = highscore < result['userScore'] ? result['userScore'] : highscore);
+    }
   }
 
   requestCallback(arg) {
