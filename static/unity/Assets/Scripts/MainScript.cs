@@ -43,14 +43,17 @@ public class MainScript : MonoBehaviour
                 if (curText == "LOGIN") {
                     Login();
                 }
-                else {
-                    selecAvatarPanel.SetActive(true);
+                else { 
+                    //selecAvatarPanel.SetActive(true);
+                    PlayerPrefs.SetString("userAvatar", "basic"); //Setting initialize user's avatar
+                    SceneManager.LoadScene("Stage");    //Change scene
                 }
                 break;
             case "rankingButton":
                 PlayerPrefs.SetInt("userScore", 0); //Setting initialize user's score
                 SceneManager.LoadScene("Ranking");
                 break;
+               /* if select avatar at metaID App
             case "metaButton":
                 PlayerPrefs.SetString("userAvatar", "meta"); //Setting initialize user's avatar
                 SceneManager.LoadScene("Stage");    //Change scene
@@ -59,6 +62,7 @@ public class MainScript : MonoBehaviour
                 PlayerPrefs.SetString("userAvatar", "basic");
                 SceneManager.LoadScene("Stage");
                 break;
+                */
         }
     }
 

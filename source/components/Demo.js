@@ -18,37 +18,28 @@ var _alert = window.alert;
 _alert = (function(message){console.log(message)});
 window.alert = _alert;
 
-// For Unity Test
-var test = true;
-
 export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.request = ['name'];
+
+    this.state = {
+      requestVisibility: false,
+      transacVisibility: false,
+    }
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    unityContent.on("SendId", (userMetaId) => {
-      if( test ) {  }
-      else {document.getElementById('requestID').click();  }
-    });
+    unityContent.on("SendId", (userMetaId) => { document.getElementById('requestID').click(); });
 
     unityContent.on("Login", () => {
-      this.getHighScore().then(() => {
-        if( test ) {
-          unityContent.send("Canvas", "onRequest", 'Alpha');
-          unityContent.send("Canvas", "SetHighScore", highscore.toString());
-        }
-        else { document.getElementById('requestID').click();  }
-      });
+      this.getHighScore().then(() => { document.getElementById('requestID').click() });
     });
 
-    unityContent.on("StopInterval", () => {
-      clearInterval(this.interval);
-    });
+    unityContent.on("StopInterval", () => { clearInterval(this.interval) });
     
     unityContent.on("GameOver", (_userScore) => {
       userScore = _userScore;
@@ -57,8 +48,6 @@ export default class Demo extends Component {
 
     unityContent.on("RegisterScore", async () => {  
       await metaGalaga.methods.minScore().call().then(async (result) => {
-        // For Test
-        userName = 'Alpha';
         if(result < userScore) {
           var request = metaGalaga.methods.registerScore(userName, userScore)
                         .send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
@@ -77,9 +66,7 @@ export default class Demo extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('requestDiv').style.visibility = "hidden";
-    document.getElementById('sendTransactionDiv').style.visibility = "hidden";
-    
+    this.setState({ requestVisibility: true});
     //Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
@@ -138,8 +125,8 @@ export default class Demo extends Component {
         <div style={styles.unityContainer}>
           <Unity unityContent={unityContent}/>
 
-        <div id='requestDiv' style={styles.metaSdkComponent}>
-        {unityContent != undefined &&
+        <div id='requestDiv' style={styles.metaSDKcomponent}>
+        {unityContent != undefined && this.state.requestVisibility &&
           <Request 
             id = 'requestID'
             request={this.request}
@@ -151,10 +138,10 @@ export default class Demo extends Component {
             callback = {this.requestCallback}
           />
         }
-        </div> 
+        </div>
         
-        <div id='sendTransactionDiv' style={styles.metaSdkComponent}>
-        {this.data != undefined &&
+        <div id='sendTransactionDiv' style={styles.metaSDKcomponent}>
+        {this.data != undefined && 
           <SendTransaction
             id = 'sendTransactionID'
             to = {this.to}
@@ -183,7 +170,8 @@ export default class Demo extends Component {
       width: "1024px",
       height: "768px",
     },
-    metaSdkComponent: {
+    metaSDKcomponent: {
       marginLeft: "32%",
+      visibility: 'hidden'
     },
   };

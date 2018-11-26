@@ -30,7 +30,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "ipfs-api": "^24.0.2",
-    "metasdk-react": "^0.3.1",
+    "metasdk-react": "^0.5.1",
     "next": "^6.1.2",
     "openzeppelin-solidity": "2.0.0-rc.2",
     "prop-types": "^15.6.2",

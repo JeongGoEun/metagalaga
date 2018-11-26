@@ -4,10 +4,46 @@ node_modules/*
 package-lock.json
 
 static/unity/Temp/*
+static/unity/.vs
 static/unity/obj/*
+static/unity/Library/*
+static/unity/UnityGenerated/*
 static/unity/Library/metadata/*
 static/unity/Library/*Cache/*
 static/unity/Library/shadercompiler*.log
 ethereum/web3-config.json
-
-
+ 
+ 
+ 
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ 
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+ 
+ 
+ 
+# ============ #
+# OS generated #
+# ============ #
+ 
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+GraphicsSettings.asset
+ProjectSettings.asset
+ProjectVersion.txt
