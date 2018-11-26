@@ -23,11 +23,6 @@ export default class Demo extends Component {
     super(props);
     this.request = ['name'];
 
-    this.state = {
-      requestVisibility: false,
-      transacVisibility: false,
-    }
-
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
@@ -67,7 +62,7 @@ export default class Demo extends Component {
 
   componentDidMount() {
     this.setState({ requestVisibility: true});
-    //Get MetaGalaga contract
+    // Get MetaGalaga contract
     metaGalaga = new web3.eth.Contract(JSON.parse(compiledMetaGalaga.interface), mgContractAddr); 
   }
 
@@ -77,7 +72,7 @@ export default class Demo extends Component {
 
   async checkListUpdate() {
     for (var i=1; i <= 10; i++) {
-      //Send Ranking from Contract to Unity
+      // Send Ranking from Contract to Unity
       await metaGalaga.methods.rankMap(i).call().then((result) => {
         unityContent.send("Panel - ScrollVew","SetUserMetaId", result['userMetaId'].toString());
         unityContent.send("Panel - ScrollVew","SetUserName", result['userName'].toString());
@@ -89,7 +84,6 @@ export default class Demo extends Component {
 
   async getHighScore() {
     for (var i=1; i <= 10; i++) {
-      //Send Ranking from Contract to Unity
       await metaGalaga.methods.rankMap(i).call().then((result) => highscore = highscore < result['userScore'] ? result['userScore'] : highscore);
     }
   }
@@ -97,7 +91,7 @@ export default class Demo extends Component {
   requestCallback(arg) {
     this.request.map((req) => {
       userName = arg[req];
-      //For Change Login button text
+      // Change text in Login button
       unityContent.send("Canvas", "onRequest", userName.toString()); 
       return req;
     });
@@ -115,18 +109,19 @@ export default class Demo extends Component {
   registerUpdate(receipt) {
     this.checkListUpdate();
 
-    //Enable SendTransaction QR Code
+    // Enable SendTransaction QR Code
     document.getElementById('sendTransactionID').click();  
   }
 
   render() {
     return (
       <div >
-        <div style={styles.unityContainer}>
+        <center><div style={styles.unityContainer}>
           <Unity unityContent={unityContent}/>
+        </div></center>
 
         <div id='requestDiv' style={styles.metaSDKcomponent}>
-        {unityContent != undefined && this.state.requestVisibility &&
+        {unityContent != undefined &&
           <Request 
             id = 'requestID'
             request={this.request}
@@ -137,41 +132,36 @@ export default class Demo extends Component {
             qrposition='top left'
             callback = {this.requestCallback}
           />
-        }
-        </div>
+        }</div>
         
         <div id='sendTransactionDiv' style={styles.metaSDKcomponent}>
-        {this.data != undefined && 
-          <SendTransaction
-            id = 'sendTransactionID'
-            to = {this.to}
-            value = {this.value}
-            data= {this.data}
-            usage= 'registerScore'
-            service = 'MetaGalaga'
-            qrsize={256}
-            qrvoffset={170}
-            qrpadding='3em'
-            qrposition='top left'
-            callback={this.sendTransactionCallback}
-          />
-        }
-        </div>
-
-        </div>
+          {this.data != undefined &&
+            <SendTransaction
+              id = 'sendTransactionID'
+              to = {this.to}
+              value = {this.value}
+              data= {this.data}
+              usage= 'registerScore'
+              service = 'MetaGalaga'
+              qrsize={256}
+              qrvoffset={170}
+              qrpadding='3em'
+              qrposition='top left'
+              callback={this.sendTransactionCallback}
+            />
+          }</div>
       </div>
     );
   }
 }
-  const styles = {
-    unityContainer: {
-      marginLeft: "20%",
-      marginTop: "30px",
-      width: "1024px",
-      height: "768px",
-    },
-    metaSDKcomponent: {
-      marginLeft: "32%",
-      visibility: 'hidden'
-    },
-  };
+const styles = {
+  unityContainer: {
+    marginTop: '2%',
+    width: "1024px",
+    height: "768px",
+  },
+  metaSDKcomponent: {
+    visibility: 'hidden',
+    marginLeft: '41%',
+  },
+};
