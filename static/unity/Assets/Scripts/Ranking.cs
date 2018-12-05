@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Runtime.InteropServices;
 
+
 public class Ranking : MonoBehaviour
 {
     public Button quitBtn, replayBtn;

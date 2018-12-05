@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Unity, { UnityContent } from "react-unity-webgl";
 import web3 from '../../ethereum/web3';
 import web3config from '../../ethereum/web3-config.json';
-import { Login, Request, SendTransaction } from 'metasdk-react';
+import { Request, SendTransaction } from 'metasdk-react';
 
 const compiledMetaGalaga = require('../../ethereum/build/MetaGalaga.json');
 const mgContractAddr=web3config.contractAddr;
@@ -19,16 +19,22 @@ _alert = (function(message){console.log(message)});
 window.alert = _alert;
 
 export default class Demo extends Component {
+  // Topic number - 10 : name
+  request = ['10'];
+
   constructor(props) {
     super(props);
-    this.request = ['name'];
+
+    this.state = { isRegister: false };
 
     unityContent = new UnityContent(
       "/static/unity/Build/Build/Build.json",
       "/static/unity/Build/Build/UnityLoader.js"
     );
 
-    unityContent.on("SendId", (userMetaId) => { document.getElementById('requestID').click(); });
+    unityContent.on("SendId", (userMetaId) => { 
+      console.log("SendId") 
+    });
 
     unityContent.on("Login", () => {
       this.getHighScore().then(() => { document.getElementById('requestID').click() });
@@ -36,26 +42,24 @@ export default class Demo extends Component {
 
     unityContent.on("StopInterval", () => { clearInterval(this.interval) });
     
-    unityContent.on("GameOver", (_userScore) => {
+    unityContent.on("GameOver", async(_userScore) => {
       userScore = _userScore;
-      this.checkListUpdate();
-    });
 
-    unityContent.on("RegisterScore", async () => {  
       await metaGalaga.methods.minScore().call().then(async (result) => {
         if(result < userScore) {
-          var request = metaGalaga.methods.registerScore(userName, userScore)
-                        .send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
+          var request = metaGalaga.methods.registerScore(userName, userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
       
           this.to = request.params[0].to;
           this.value = request.params[0].value;
           this.data = request.params[0].data;
-
-          this.forceUpdate();
-          document.getElementById('sendTransactionID').click();  
+          this.setState({isRegister: true});
         }
       });
+
+      this.checkListUpdate();
     });
+
+    unityContent.on("RegisterScore", () => { document.getElementById('sendTransactionID').click() });
     // Binding
     registerUpdate = this.registerUpdate.bind(this);
   }
@@ -91,8 +95,10 @@ export default class Demo extends Component {
   requestCallback(arg) {
     this.request.map((req) => {
       userName = arg[req];
-      // Change text in Login button
+      console.log("Get response name: ", userName);
       unityContent.send("Canvas", "onRequest", userName.toString()); 
+      document.getElementById('requestID').click(); 
+
       return req;
     });
   }
@@ -125,29 +131,28 @@ export default class Demo extends Component {
           <Request 
             id = 'requestID'
             request={this.request}
-            service = 'MetaGalaga'
+            usage = 'MetaGalaga'
+            callback = {this.requestCallback}
             qrsize={256}
             qrvoffset={170}
             qrpadding='3em'
             qrposition='top left'
-            callback = {this.requestCallback}
           />
         }</div>
         
         <div id='sendTransactionDiv' style={styles.metaSDKcomponent}>
-          {this.data != undefined &&
+          {this.state.isRegister &&
             <SendTransaction
               id = 'sendTransactionID'
               to = {this.to}
               value = {this.value}
               data= {this.data}
               usage= 'registerScore'
-              service = 'MetaGalaga'
+              callback={this.sendTransactionCallback}
               qrsize={256}
               qrvoffset={170}
               qrpadding='3em'
               qrposition='top left'
-              callback={this.sendTransactionCallback}
             />
           }</div>
       </div>
