@@ -1,6 +1,6 @@
 # MetaGalaga
 ### Concept
-- Gaining scores through shooting games
+- shooting game dapp using metadium blockchain
 
 ### Features
 1. Login with MetaID App
