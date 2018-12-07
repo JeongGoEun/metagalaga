@@ -16,7 +16,7 @@ Before compiling, src/ethereum/web3-config.json should be provided following spe
 }
 ```
 
-## Thanks to
+## What more
 - [react](https://www.npmjs.com/package/react)
 - [react-unity-webgl](https://www.npmjs.com/package/react-unity-webgl)
 - [metasdk-react](https://www.npmjs.com/package/metasdk-react)
