@@ -1,8 +1,8 @@
 # MetaGalaga
-### Concept
-- shooting game dapp using metadium blockchain
+## Concept
+- Shooting game dapp using metadium blockchain
 
-### Features
+## Features
 1. Login with MetaID App
 2. Provide ranking system on Metadium Blockchain
     - A transaction occurs when registering in a ranking
@@ -24,8 +24,6 @@ Before compiling, src/ethereum/web3-config.json should be provided following spe
 
 ## Run
 ```shell
-git clone https://github.com/JeongGoEun/MetaGalaga.git
-cd MetaGalaga
 npm install && npm run dev
 ```
 

@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{C3DA89E1-70C6-7D6C-993E-C8F831D35880}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Ranking.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MainScript.cs">
     <Files>
       <File FileName="Assets/Scripts/Ranking.cs" Line="14" Column="33" />
       <File FileName="Assets/Scripts/DynamicScrollView.cs" Line="123" Column="32" />
-      <File FileName="Assets/Scripts/MainScript.cs" Line="69" Column="26" />
+      <File FileName="Assets/Scripts/MainScript.cs" Line="20" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
