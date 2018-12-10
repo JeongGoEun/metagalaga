@@ -4,7 +4,7 @@ import web3 from '../ethereum/web3.js';
 import Favicon from 'react-favicon'
 
 const DynamicComponentWithNoSSR = dynamic(
-  import('../source/components/Demo'),
+  import('../source/components/Galaga'),
   { ssr: false }
 )
 

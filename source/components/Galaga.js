@@ -15,7 +15,7 @@ var _alert = window.alert;
 _alert = (function(message){console.log(message)});
 window.alert = _alert;
 
-export default class Demo extends Component {
+export default class Galaga extends Component {
   // Topic number - 10 : name, 110 : avatar
   request = ['10', '110'];
   data = { userName: '', userAvatar: 0, userScore: 0, highscore: 0, }
@@ -50,7 +50,7 @@ export default class Demo extends Component {
           var request = metaGalaga.methods.registerScore(this.data.userName, this.data.userScore).send.request({from: "", value: web3.utils.toWei('0', 'ether'), gasPrice: '1'});
           this.to = request.params[0].to;
           this.value = request.params[0].value;
-          this.data = request.params[0].data;
+          this.trxData = request.params[0].data;
           this.setState({transacModalVisible: true});
         }
       });
@@ -123,6 +123,7 @@ export default class Demo extends Component {
           />}
         </div>
         
+        { this.trxData != undefined &&
         <div>
           <center><Modal 
             contentLabel='Register Score' 
@@ -133,7 +134,7 @@ export default class Demo extends Component {
               id = 'sendTransactionID'
               to = {this.to}
               value = {this.value}
-              data= {this.data}
+              data= {this.trxData}
               usage= 'registerScore'
               callbackUrl=' '
               qrsize={256}
@@ -143,7 +144,7 @@ export default class Demo extends Component {
             />
             <center><button onClick={() => this.updateRanking()} style={{marginTop: '4%'}}>CLOSE</button></center>
           </Modal></center>
-        </div>
+        </div>}
       </div>
     );
   }
@@ -156,7 +157,7 @@ const styles = {
   },
   metaSDKcomponent: {
     visibility: 'hidden',
-    marginLeft: '41%',
+    marginLeft: '39.5%',
   },
   modalStyle: {
     content: {

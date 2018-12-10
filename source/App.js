@@ -1,5 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import Demo from "./components/Demo";
+import Galaga from "./components/Galaga";
 
-render(<Demo/>, document.getElementById('app')); 
+render(<Galaga/>, document.getElementById('app')); 
