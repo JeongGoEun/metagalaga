@@ -2,6 +2,9 @@
 ## Concept
 - Shooting game dapp using metadium blockchain
 
+## Play Scene
+![playImg](./image/playImg.png){: height="384px" width="513px"}
+
 ## Features
 1. Login with MetaID App
 2. Provide ranking system on Metadium Blockchain
