@@ -8,7 +8,7 @@
     - A transaction occurs when registering in a ranking
 
 ## Web3
-Before compiling, src/ethereum/web3-config.json should be provided following spec described in web3.js. Here is example:
+Before compiling, ethereum/web3-config.json should be provided following spec described in web3.js. Here is example:
 ```shell
 {
     "url" : "https://ropsten.infura.io",
