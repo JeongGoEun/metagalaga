@@ -3,7 +3,7 @@
 - Shooting game dapp using metadium blockchain
 
 ## Play Scene
-![playImg](./image/playImg.png =513x831)
+![playImg](./image/playImg.png)
 
 ## Features
 1. Login with MetaID App
