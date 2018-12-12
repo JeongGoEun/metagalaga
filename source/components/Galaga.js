@@ -25,8 +25,8 @@ export default class Galaga extends Component {
     super(props);
 
     unityContent = new UnityContent(
-      "/static/unity/Build/Build/Build.json",
-      "/static/unity/Build/Build/UnityLoader.js"
+      "/static/unity/Build/Build.json",
+      "/static/unity/Build/UnityLoader.js"
     );
 
     unityContent.on("SendId", (userMetaId) => { 
