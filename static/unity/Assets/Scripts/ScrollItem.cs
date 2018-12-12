@@ -12,7 +12,7 @@ public class ScrollItem : MonoBehaviour
     #endregion
 
     #region PRIVATE_VARIABLES
-    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
     #endregion
 
     #region UNITY_CALLBACKS
@@ -33,7 +33,7 @@ public class ScrollItem : MonoBehaviour
         nameText.text = transform.GetChild(0).name;
         scoreText.text = transform.GetChild(2).name;
         metaIdText.text = transform.GetChild(1).name;
-        timestampText.text = TimeToStr(Double.Parse(transform.GetChild(3).name));
+        timestampText.text = TimeToStr(UInt64.Parse(transform.GetChild(3).name));
     }
 
 	#endregion
@@ -58,16 +58,10 @@ public class ScrollItem : MonoBehaviour
     }
     #endregion
 
-    public string TimeToStr(double _timestamp)
+    public string TimeToStr(UInt64 _timestamp)
     {
         string[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-        DateTime dateTime = UnixTimeToDateTime(_timestamp);
-
+        DateTime dateTime = Epoch.AddSeconds(_timestamp).ToUniversalTime();
         return (dateTime.Day.ToString() + "." + months[dateTime.Month - 1] + "." + dateTime.Year.ToString());
-    }
-
-    public static DateTime UnixTimeToDateTime(double unixTimeStamp)
-    {
-        return Epoch.AddSeconds(unixTimeStamp).ToUniversalTime();
     }
 }

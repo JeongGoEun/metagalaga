@@ -23,24 +23,28 @@ public class Ranking : MonoBehaviour
 
 	private void Start()
 	{
-        userScore = PlayerPrefs.GetInt("userScore");    //get user score from Player.cs
+        // Get user score from Player.cs
+        userScore = PlayerPrefs.GetInt("userScore");   
         Debug.Log("Ranking.cs Start()'s userScore : " + userScore);
 
-        if (userScore != 0) {   //바로 넘어오지 않았을 때 game over event 전달
+        // Deliver game over event when it is not over
+        if (userScore != 0) {
             replayBtn.GetComponent<Button>().interactable = true;
             GameOver(userScore);
         }
-        else {
+        else
+        {
+            // Disable the button when you go directly from main
             replayBtn.GetComponent<Button>().interactable = false; //main에서 바로 넘어올 때 버튼 비활성화
             GameOver(0);
         }
 	}
 
-	public void onClick()
+	public void OnClick()
     {
-        string curButton = EventSystem.current.currentSelectedGameObject.name.ToString();
+        string curButton = EventSystem.current.currentSelectedGameObject.name;
 
-        //Initialize
+        // Initialize for game info
         PlayerPrefs.SetInt("userScore", 0);
         DynamicScrollView.registerCheck = false;
         DynamicScrollView.curUserTimestamp = 0;

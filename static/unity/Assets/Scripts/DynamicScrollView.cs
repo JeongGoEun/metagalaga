@@ -33,7 +33,7 @@ public class DynamicScrollView : MonoBehaviour
     public static List<User> userList = new List<User>();
     public static int userIndex = 0;
     public static int curUserTimestamp = 0;
-    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+    private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
     public static bool registerCheck = false;
 
 

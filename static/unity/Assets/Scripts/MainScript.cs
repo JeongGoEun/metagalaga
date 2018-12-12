@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
+using System;
+
 
 public class MainScript : MonoBehaviour
 {
@@ -28,9 +30,9 @@ public class MainScript : MonoBehaviour
 	private void Start()
 	{
         selecAvatarPanel.SetActive(false);
-	}
+    }
 
-	public void onClick()
+	public void OnClick()
     {
         Button curButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         string curButtonName = curButton.name.ToString();

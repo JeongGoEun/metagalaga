@@ -68,7 +68,6 @@ export default class Galaga extends Component {
   }
 
   async checkListUpdate() {
-    console.log('checkListUpdate');
     for (var i=1; i <= 10; i++) {
       // Send Ranking from Contract to Unity
       await metaGalaga.methods.rankMap(i).call().then((result) => {
@@ -86,7 +85,7 @@ export default class Galaga extends Component {
     }
   }
 
-  updateRanking() {
+  closeBtnCallback() {
     this.setState({ transacModalVisible: false });
     this.interval = setInterval(() => { this.checkListUpdate() }, 1000);    
   }
@@ -142,7 +141,7 @@ export default class Galaga extends Component {
               qrpadding='3em'
               qrposition='top left'
             />
-            <center><button onClick={() => this.updateRanking()} style={{marginTop: '4%'}}>CLOSE</button></center>
+            <center><button onClick={() => this.closeBtnCallback()} style={{marginTop: '4%'}}>CLOSE</button></center>
           </Modal></center>
         </div>}
       </div>
@@ -170,7 +169,7 @@ const styles = {
       padding: '3em',
       width: '256px',
       height: '256px',
-      marginLeft: '41%',
+      marginLeft: '39.5%',
       marginTop: '10%',
     }
   }
