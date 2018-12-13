@@ -1,7 +1,7 @@
 .NET Core uses third-party libraries or other resources that may be
 distributed under licenses different than the .NET Core software.
 
-## Galaga
+## 2D Scrolling Shooter
 | property | value |
 |----------|-------|
 | packageId | 2D Scrolling Shooter |
