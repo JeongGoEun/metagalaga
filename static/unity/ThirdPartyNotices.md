@@ -4,6 +4,6 @@ distributed under licenses different than the .NET Core software.
 ## Galaga
 | property | value |
 |----------|-------|
-| packageId | HTML5 Boilerplate |
-| packageVersion | null |
-| licenseFile | HTML5Boilerplate.txt |
+| packageId | 2D Scrolling Shooter |
+| packageVersion | 1.0 |
+| licenseFile | unity/Assets/_ReadMe.txt |
