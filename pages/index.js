@@ -9,15 +9,15 @@ const DynamicComponentWithNoSSR = dynamic(
 )
 
 class Index extends Component {
-  componentDidMount() {
+  componentDidMount () {
     web3.eth.net.getNetworkType().then((network) => { console.log('NETWORK TYPE : ', network) })
   }
-  render() {
+  render () {
     return (
-        <div>
-          <Favicon url="../static/favicon.ico" />
-          <DynamicComponentWithNoSSR />
-        </div>
+      <div>
+        <Favicon url='../static/favicon.ico' />
+        <DynamicComponentWithNoSSR />
+      </div>
     )
   }
 }

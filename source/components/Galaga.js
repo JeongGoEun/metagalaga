@@ -84,8 +84,9 @@ export default class Galaga extends Component {
     for (var i = 1; i <= 10; i++) {
       await metaGalaga.methods.rankMap(i).call().then((result) => {
         this.data.highscore = this.data.highscore < result['userScore']
-        ? result['userScore']
-        : this.data.highscore })
+          ? result['userScore']
+          : this.data.highscore
+      })
     }
   }
 
@@ -115,7 +116,7 @@ export default class Galaga extends Component {
         </div></center>
 
         <div id='requestDiv' style={styles.metaSDKcomponent}>
-        {unityContent !== undefined &&
+          {unityContent !== undefined &&
           <Request
             id='requestID'
             request={this.request}
@@ -135,22 +136,22 @@ export default class Galaga extends Component {
             isOpen={this.state.transacModalVisible}
             style={styles.modalStyle}
           >
-          <SendTransaction
-            id='sendTransactionID'
-            to={this.to}
-            value={this.value}
-            data={this.trxData}
-            usage='registerScore'
-            callbackUrl=' '
-            qrsize={256}
-            qrvoffset={170}
-            qrpadding='3em'
-            qrposition='top left'
-          />
-          <center><button onClick={() => this.closeBtnCallback()} style={{ marginTop: '4%' ㅊ}}>CLOSE</button></center>
-        </Modal></center>
-      </div>}
-    </div>
+            <SendTransaction
+              id='sendTransactionID'
+              to={this.to}
+              value={this.value}
+              data={this.trxData}
+              usage='registerScore'
+              callbackUrl=' '
+              qrsize={256}
+              qrvoffset={170}
+              qrpadding='3em'
+              qrposition='top left'
+            />
+            <center><button onClick={() => this.closeBtnCallback()} style={{ marginTop: '4%' }}>CLOSE</button></center>
+          </Modal></center>
+        </div>}
+      </div>
     )
   }
 }
