@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import dynamic from 'next/dynamic';
-import web3 from '../ethereum/web3.js';
+import React, { Component } from 'react'
+import dynamic from 'next/dynamic'
+import web3 from '../ethereum/web3.js'
 import Favicon from 'react-favicon'
 
 const DynamicComponentWithNoSSR = dynamic(
@@ -14,10 +14,10 @@ class Index extends Component {
   }
   render() {
     return (
-      <div>
-        <Favicon url="../static/favicon.ico" />
-        <DynamicComponentWithNoSSR />
-      </div>
+        <div>
+          <Favicon url="../static/favicon.ico" />
+          <DynamicComponentWithNoSSR />
+        </div>
     )
   }
 }
