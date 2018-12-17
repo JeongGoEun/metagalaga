@@ -31,7 +31,7 @@ export default class Galaga extends Component {
     )
 
     unityContent.on('SendId', (userMetaId) => {
-      console.log('SendId')
+      console.log('SendId', userMetaId)
     })
 
     unityContent.on('Login', () => {

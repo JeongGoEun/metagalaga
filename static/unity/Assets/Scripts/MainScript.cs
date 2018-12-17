@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System;
+using System.Text;
+
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
-using System;
 
 
 public class MainScript : MonoBehaviour
@@ -26,13 +28,13 @@ public class MainScript : MonoBehaviour
     private static void SendId(string userMetaId) {}
     private static void Login(){}
 #endif
-
+    
 	private void Start()
 	{
         selecAvatarPanel.SetActive(false);
     }
 
-	public void OnClick()
+    public void OnClick()
     {
         Button curButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         string curButtonName = curButton.name.ToString();
@@ -69,15 +71,22 @@ public class MainScript : MonoBehaviour
     }
 
     public void onRequest(string _userName) {
-        this.userName = _userName;
 
-        playerText.GetComponentInChildren<Text>().text = "PLAYER : " + _userName;
+        byte[] encodeBytes = Encoding.UTF8.GetBytes(_userName);
+        string encodeStr = Convert.ToBase64String(encodeBytes);
+
+        byte[] decodeBytes = Convert.FromBase64String(encodeStr);
+        userName = Encoding.UTF8.GetString(decodeBytes);
+
+        playerText.GetComponentInChildren<Text>().text = "PLAYER : " + userName;
         loginBtn.GetComponentInChildren<Text>().text = "PLAY";
 
-        PlayerPrefs.SetString("userName", this.userName);    //store METAID in prefs for interaction
+        PlayerPrefs.SetString("userName", userName);    //store METAID in prefs for interaction
+        Debug.Log("OnRequest in unity" + userName + playerText.GetComponentInChildren<Text>().text);
 
-        SendId(this.userName);
+        SendId(userName);
     }
+
     public void SetHighScore(string _highscore)
     {
         Debug.Log("SetHighScore: " + _highscore);

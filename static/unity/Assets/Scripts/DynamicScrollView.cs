@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
+
 using System;
+using System.Text;
 using System.Runtime.InteropServices;
+using System.Collections;
+using System.Collections.Generic;
 
 public class DynamicScrollView : MonoBehaviour
 {
@@ -45,6 +47,7 @@ public class DynamicScrollView : MonoBehaviour
 
 	public void InitializeList() {
         ClearOldElement();
+        var utf8 = Encoding.UTF8;
 
         //Sort using user score
         userList.Sort(delegate (User user1, User user2) {
@@ -58,7 +61,8 @@ public class DynamicScrollView : MonoBehaviour
 
         foreach (User user in userList) {
             if (user.userScore != 0) {
-                InitializeNewItem(user.userMetaId, user.userName, user.userScore, user.timestamp);
+                byte[] nameBytes = utf8.GetBytes(user.userName);
+                InitializeNewItem(user.userMetaId, utf8.GetString(nameBytes), user.userScore, user.timestamp);
             }
         }
         SetContentHeight();

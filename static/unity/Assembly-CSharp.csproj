@@ -81,7 +81,7 @@
     <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
     <None Include="Assets\Shaders\BlurShader.shader" />
     <None Include="Assets\Shaders\UI-Default-No-Alpha.shader" />
-    <None Include="Assets\Fonts\PressStart2P-Regular\OFL.txt" />
+    <None Include="Assets\Fonts\NotoSansCJKkr-hinted\LICENSE_OFL.txt" />
     <None Include="Assets\_ReadMe.txt" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>/Users/jeong-go-eun/Desktop/META_Galaga/static/unity/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
