@@ -82,14 +82,12 @@ public class MainScript : MonoBehaviour
         loginBtn.GetComponentInChildren<Text>().text = "PLAY";
 
         PlayerPrefs.SetString("userName", userName);    //store METAID in prefs for interaction
-        Debug.Log("OnRequest in unity" + userName + playerText.GetComponentInChildren<Text>().text);
 
         SendId(userName);
     }
 
     public void SetHighScore(string _highscore)
     {
-        Debug.Log("SetHighScore: " + _highscore);
         PlayerPrefs.SetInt("highScore", int.Parse(_highscore));    //store METAID in prefs for interaction
     }
 }

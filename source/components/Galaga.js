@@ -83,11 +83,12 @@ export default class Galaga extends Component {
   async getHighScore () {
     for (var i = 1; i <= 10; i++) {
       await metaGalaga.methods.rankMap(i).call().then((result) => {
-        this.data.highscore = this.data.highscore < result['userScore']
-          ? result['userScore']
+        this.data.highscore = this.data.highscore < parseInt(result['userScore'])
+          ? parseInt(result['userScore'])
           : this.data.highscore
       })
     }
+    unityContent.send('Canvas', 'SetHighScore', this.data.highscore.toString())
   }
 
   closeBtnCallback () {
